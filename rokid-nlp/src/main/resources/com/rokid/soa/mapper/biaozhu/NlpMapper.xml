@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.biaozhu.NlpMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.Nlp" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="BIGINT" />
+    <result column="asr" property="asr" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="domain" property="domain" jdbcType="VARCHAR" />
+    <result column="intent" property="intent" jdbcType="VARCHAR" />
+    <result column="slot" property="slot" jdbcType="VARCHAR" />
+    <result column="new_domain" property="newDomain" jdbcType="VARCHAR" />
+    <result column="new_intent" property="newIntent" jdbcType="VARCHAR" />
+    <result column="new_slot" property="newSlot" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="nlp" property="nlp" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="BIGINT" />
+    <result column="upd_id" property="updId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sn, time, asr, path, domain, intent, slot, new_domain, new_intent, new_slot, type, 
+    nlp, upd_time, upd_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_nlp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_nlp
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.biaozhu.Nlp" >
+    insert into rokid_nlp (id, sn, time, 
+      asr, path, domain, intent, 
+      slot, new_domain, new_intent, 
+      new_slot, type, nlp, 
+      upd_time, upd_id)
+    values (#{id,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT}, 
+      #{asr,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{domain,jdbcType=VARCHAR}, #{intent,jdbcType=VARCHAR}, 
+      #{slot,jdbcType=VARCHAR}, #{newDomain,jdbcType=VARCHAR}, #{newIntent,jdbcType=VARCHAR}, 
+      #{newSlot,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{nlp,jdbcType=VARCHAR}, 
+      #{updTime,jdbcType=BIGINT}, #{updId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.Nlp" >
+    insert into rokid_nlp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="asr != null" >
+        asr,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="domain != null" >
+        domain,
+      </if>
+      <if test="intent != null" >
+        intent,
+      </if>
+      <if test="slot != null" >
+        slot,
+      </if>
+      <if test="newDomain != null" >
+        new_domain,
+      </if>
+      <if test="newIntent != null" >
+        new_intent,
+      </if>
+      <if test="newSlot != null" >
+        new_slot,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="nlp != null" >
+        nlp,
+      </if>
+      <if test="updTime != null" >
+        upd_time,
+      </if>
+      <if test="updId != null" >
+        upd_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="asr != null" >
+        #{asr,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="slot != null" >
+        #{slot,jdbcType=VARCHAR},
+      </if>
+      <if test="newDomain != null" >
+        #{newDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="newIntent != null" >
+        #{newIntent,jdbcType=VARCHAR},
+      </if>
+      <if test="newSlot != null" >
+        #{newSlot,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="nlp != null" >
+        #{nlp,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null" >
+        #{updId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.Nlp" >
+    update rokid_nlp
+    <set >
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="asr != null" >
+        asr = #{asr,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="domain != null" >
+        domain = #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        intent = #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="slot != null" >
+        slot = #{slot,jdbcType=VARCHAR},
+      </if>
+      <if test="newDomain != null" >
+        new_domain = #{newDomain,jdbcType=VARCHAR},
+      </if>
+      <if test="newIntent != null" >
+        new_intent = #{newIntent,jdbcType=VARCHAR},
+      </if>
+      <if test="newSlot != null" >
+        new_slot = #{newSlot,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="nlp != null" >
+        nlp = #{nlp,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null" >
+        upd_id = #{updId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.Nlp" >
+    update rokid_nlp
+    set sn = #{sn,jdbcType=VARCHAR},
+      time = #{time,jdbcType=BIGINT},
+      asr = #{asr,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      domain = #{domain,jdbcType=VARCHAR},
+      intent = #{intent,jdbcType=VARCHAR},
+      slot = #{slot,jdbcType=VARCHAR},
+      new_domain = #{newDomain,jdbcType=VARCHAR},
+      new_intent = #{newIntent,jdbcType=VARCHAR},
+      new_slot = #{newSlot,jdbcType=VARCHAR},
+      type = #{type,jdbcType=SMALLINT},
+      nlp = #{nlp,jdbcType=VARCHAR},
+      upd_time = #{updTime,jdbcType=BIGINT},
+      upd_id = #{updId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+   <!-- 一栏查询 -->
+  <select id="listCount" resultType="int" parameterType="string">
+  	select 
+    	count(id)
+    from rokid_nlp
+    <where>
+	    <if test='param1 != null'>
+	    	and time <![CDATA[ >= ]]> #{param1} 
+	    </if>
+	    <if test='param2 != null'>
+	    	and time <![CDATA[ <= ]]> #{param2} 
+	    </if>
+	    <if test='param3 != null'>
+	    	and sn like CONCAT('',#{param3},'%')
+	    </if>
+	    <if test='param4 != null'>
+	    	and asr like CONCAT('%',#{param4},'%')
+	    </if>
+	    <if test='param5 != null'>
+	    	and domain = #{param5}
+	    </if>
+	    <if test='param6 != null'>
+	    	and intent = #{param6}
+	    </if>
+	    <if test='param7 != null'>
+	    	<if test='param7 == 1'>
+	    		and slot is null
+	    	</if>
+	    	<if test='param7 == 2'>
+	    		and length(slot) > 0 
+	    	</if>
+	    </if>
+	    <if test='param8 != null'>
+	    	and type = #{param8}
+	    </if>
+    </where>    
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select 
+    	r.*
+    from rokid_nlp r
+	    <where>
+	    <if test='param1 != null'>
+	    	and time <![CDATA[ >= ]]> #{param1} 
+	    </if>
+	    <if test='param2 != null'>
+	    	and time <![CDATA[ <= ]]> #{param2} 
+	    </if>
+	    <if test='param3 != null'>
+	    	and sn like CONCAT('',#{param3},'%')
+	    </if>
+	    <if test='param4 != null'>
+	    	and asr like CONCAT('%',#{param4},'%')
+	    </if>
+	    <if test='param5 != null'>
+	    	and domain = #{param5}
+	    </if>
+	    <if test='param6 != null'>
+	    	and intent = #{param6}
+	    </if>
+	    <if test='param7 != null'>
+	    	<if test='param7 == 1'>
+	    		and slot is null
+	    	</if>
+	    	<if test='param7 == 2'>
+	    		and length(slot) > 0 
+	    	</if>
+	    </if>
+	    <if test='param8 != null'>
+	    	and type = #{param8}
+	    </if>
+	    </where>
+   order by time desc
+   <if test="param9 != null and param10 != null">
+	limit #{param9},#{param10}
+   </if>
+  </select>
+  
+  <select id="count" resultType="com.rokid.soa.bo.manage.Count">
+  	select 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d %H' )  as time,
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d' )  as time,
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%u' )  as time,
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m' )  as time,
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y' ) as time,
+	 </if>
+	 <if test='param2 != null'>
+	 	domain,
+	 </if>
+	 sum(CASE WHEN type = 1 THEN 1 else 0 END) as errorCnt,
+	 sum(CASE WHEN type = 2 THEN 1 else 0 END) as okCnt
+	 from rokid_nlp
+	<where>
+		<if test='param4 != null'>
+	    	and upd_time <![CDATA[ >= ]]> #{param4} 
+	    </if>
+	    <if test='param5 != null'>
+	    	and upd_time <![CDATA[ <= ]]> #{param5} 
+	    </if>
+	    <if test='param2 != null'>
+	    	and domain = #{param2}
+	    </if>
+	    <if test='param3 != null'>
+	        and domain
+		    <foreach collection="param3" item="item" open=" in (" close=")" separator="," >
+	            #{item,jdbcType=VARCHAR}
+	        </foreach>
+	    </if>
+	</where>
+	group by 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d %H' )
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d' )
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%u' )
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m' )
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y' )
+	 </if>
+	 <if test='param2 != null'>
+	 	,domain
+	 </if>
+	order by 
+	<if test='param1 == "h"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d %H' )
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d' )
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%u' )
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m' )
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y' )
+	 </if>
+	 desc
+  </select>
+</mapper>

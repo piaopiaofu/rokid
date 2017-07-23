@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.FilterMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.Filter" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="crt_time" property="crtTime" jdbcType="BIGINT" />
+    <result column="crt_user" property="crtUser" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sn, crt_time, crt_user, memo
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_filter
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from rokid_filter
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.rokid.soa.bo.manage.Filter" >
+    insert into rokid_filter (id, sn, crt_time, 
+      crt_user, memo)
+    values (#{id,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{crtTime,jdbcType=BIGINT}, 
+      #{crtUser,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.Filter" >
+    insert into rokid_filter
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="crtTime != null" >
+        crt_time,
+      </if>
+      <if test="crtUser != null" >
+        crt_user,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.Filter" >
+    update rokid_filter
+    <set >
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        crt_time = #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        crt_user = #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.Filter" >
+    update rokid_filter
+    set sn = #{sn,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=BIGINT},
+      crt_user = #{crtUser,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  
+  <!-- 一栏查询 -->
+  <select id="listCount" resultType="int" parameterType="string">
+  	select 
+    	count(id)
+    from rokid_filter
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select <include refid="Base_Column_List" />
+    from rokid_filter
+   order by id desc
+   <if test="param1 != null and param2 != null">
+	limit #{param1},#{param2}
+   </if>
+  </select>
+  
+  <select id="findSn" resultMap="BaseResultMap" parameterType="string">
+  	select <include refid="Base_Column_List" />
+    from rokid_filter
+    where sn = #{param1}
+  </select>
+</mapper>

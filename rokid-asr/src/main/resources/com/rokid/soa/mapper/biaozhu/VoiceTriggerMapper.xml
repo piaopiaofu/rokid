@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rokid.soa.mapper.biaozhu.VoiceTriggerMapper">
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.VoiceTrigger">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="path" jdbcType="VARCHAR" property="path" />
+    <result column="fstatus" jdbcType="INTEGER" property="fstatus" />
+    <result column="time" jdbcType="BIGINT" property="time" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="ext_field" jdbcType="VARCHAR" property="extField" />
+    <result column="edit_admin" jdbcType="SMALLINT" property="editAdmin" />
+    <result column="upd_time" jdbcType="BIGINT" property="updTime" />
+    <result column="upd_id" jdbcType="VARCHAR" property="updId" />
+    <result column="upd_name" jdbcType="VARCHAR" property="updName" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, version, sn, path, time, type, ext_field, edit_admin, upd_time, upd_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_voice_trigger
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+    delete from rokid_voice_trigger
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.biaozhu.VoiceTrigger">
+    insert into rokid_voice_trigger (id, version, sn, path, time, 
+      type, upd_time, upd_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{version,jdbcType=INTEGER}, #{sn,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, #{time,jdbcType=BIGINT}, 
+      #{type,jdbcType=SMALLINT}, #{updTime,jdbcType=BIGINT}, #{updId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.VoiceTrigger">
+    insert into rokid_voice_trigger
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="sn != null">
+        sn,
+      </if>
+      <if test="path != null">
+        path,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="updTime != null">
+        upd_time,
+      </if>
+      <if test="updId != null">
+        upd_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        #{updId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.VoiceTrigger">
+    update rokid_voice_trigger
+    <set>
+      <if test="version != null">
+        version = #{version,jdbcType=INTEGER},
+      </if>
+      <if test="sn != null">
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null">
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="fstatus != null">
+        fstatus = #{fstatus,jdbcType=INTEGER},
+      </if>
+      <if test="time != null">
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="editAdmin != null">
+        edit_admin = #{editAdmin,jdbcType=SMALLINT},
+      </if>
+      <if test="updTime != null">
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        upd_id = #{updId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.VoiceTrigger">
+    update rokid_voice_trigger
+    set sn = #{sn,jdbcType=VARCHAR},
+      version = #{version,jdbcType=INTEGER},
+      path = #{path,jdbcType=VARCHAR},
+      time = #{time,jdbcType=BIGINT},
+      type = #{type,jdbcType=SMALLINT},
+      upd_time = #{updTime,jdbcType=BIGINT},
+      upd_id = #{updId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 1期取消标注 -->
+  <update id="updateNoMark">
+    update rokid_voice_trigger
+       set 
+       <if test="param2 != null">
+       	   upd_id = #{param2},
+       </if>
+       <if test="param2 == null">
+       	   upd_id = null,
+       </if>
+           upd_time = null,
+           type = null
+     where id = #{param1}
+  </update>
+  
+  <update id="biaozhu"><!-- id, upd_id, upd_time, edit_admin, ext_field, type  -->
+    update rokid_voice_trigger
+       <set>
+	       <if test="param2 ==null or param2 != '-1'">
+	       		upd_id = #{param2},
+	       </if>
+	       <if test="param3 ==null or param3 != '-1'">
+	       		upd_time = #{param3},
+	       </if>
+	       <if test="param4 ==null or param4 != '-1'">
+	       		edit_admin = #{param4},
+	       </if>
+	       <if test="param5 ==null or param5 != '-1'">
+	       		ext_field = #{param5},
+	       </if>
+	       <if test="param6 ==null or param6 != '-1'">
+	       		type = #{param6},
+	       </if>
+       </set>
+     where id = #{param1}
+  </update>
+  
+  <!-- 一栏查询 -->
+  <select id="listCount" resultType="int">
+  	select 
+    	count(id)
+    from rokid_voice_trigger
+    <where>
+    		and time > 1480521599999
+    		and ifnull(fstatus,200) = 200
+	    <if test='param1 != null'>
+	    	and upd_id = #{param1}
+	    </if>
+	    <if test='param2 != null'>
+	    	and sn like CONCAT('',#{param2},'%')
+	    </if>
+	    <if test='param3 != null'>
+	    	and time <![CDATA[ >= ]]> #{param3} 
+	    </if>
+	    <if test='param4 != null'>
+	    	and time <![CDATA[ <= ]]> #{param4} 
+	    </if>
+	    <if test='param5 != null'>
+	    	and type = #{param5} 
+	    </if>	    	
+    </where>  
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select l.*, u.user upd_name
+  	  from (
+		   select r.id, r.sn, r.path, r.time, r.type, r.edit_admin, r.upd_id, r.fstatus
+		    from rokid_voice_trigger r
+		    <where>
+		    	    and time > 1480521599999
+		    	    and ifnull(fstatus,200) = 200 
+			    <if test='param3 != null'>
+			    	and upd_id = #{param3}
+			    </if>
+			    <!-- 分页数据不传，说明获取标注者数据 -->
+			    <if test='param1 == null'>
+			    	and upd_time is null
+			    </if>			    
+			    <if test='param5 != null'>
+			    	and time <![CDATA[ >= ]]> #{param5} 
+			    </if>
+			    <if test='param6 != null'>
+			    	and time <![CDATA[ <= ]]> #{param6} 
+			    </if>
+			    <if test='param7 != null'>
+			    	and type = #{param7}
+			    </if>
+			    <if test='param4 != null'>
+			    	and sn like CONCAT('',#{param4},'%')
+			    </if>			        
+		    </where>
+		   order by id desc
+		   <if test="param1 != null and param2 != null">
+			limit #{param1},#{param2}
+		   </if>
+	  ) l left join rokid_user u on l.upd_id = u.id
+  </select>
+  
+  <!-- 关联指派数据获取数据 -->
+  <update id="getWorkRecordByWorkId">
+    update rokid_voice_trigger
+       set upd_id = #{param3}
+     where time <![CDATA[ >= ]]> #{param1} 
+       and time <![CDATA[ <= ]]> #{param2} 
+       and upd_id is null
+       and upd_time is null
+       and ifnull(fstatus,200) = 200
+       order by time
+       limit 50
+  </update>
+  
+  <!-- 正常指派数据获取数据 -->
+  <update id="getWorkRecordByNormal">
+    update rokid_voice_trigger
+       set upd_id = #{_parameter}
+     where upd_id is null
+       and upd_time is null
+       and ifnull(fstatus,200) = 200
+       order by id
+       limit 50
+  </update>
+    
+  <!-- 正常指派数据获取数据  id，userType，type，userId，time -->
+  <update id="updateBiaozhu">
+    update rokid_voice_trigger
+       set 
+       <if test="param2 == 1">
+           edit_admin = 1,
+           type = #{param3},
+           upd_time = #{param5},
+       </if>
+       <if test="param2 != null">
+       	   upd_id = #{param2},
+       </if>
+       <if test="param2 == null">
+       	   upd_id = null,
+       </if>
+           upd_time = null,
+           type = null
+     where id = #{param1}
+  </update>
+  
+  <!-- 用户退出删除分配数据 -->
+  <update id="loginOutDelWorkDate">
+    update rokid_voice_trigger
+       set upd_id = null
+     <where>
+     	<if test="_parameter != null">
+       		and upd_id = #{_parameter}
+       	</if>
+    	and type is null
+   		and upd_time is null
+     </where>
+  </update>
+  
+  <!-- 删除黑名单数据 -->
+  <delete id="delFilterRec">
+  	DELETE from rokid_voice_trigger where time > UNIX_TIMESTAMP(now())*1000 - 30*24*3600*1000 and sn IN(
+	   SELECT sn from rokid_filter
+    )
+  </delete>
+</mapper>

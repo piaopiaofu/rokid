@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.IntentMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.Intent" >
+    <id column="domain" property="domain" jdbcType="VARCHAR" />
+    <id column="intent" property="intent" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="ver" property="ver" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    domain, intent, type, ver
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.rokid.soa.bo.manage.IntentKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_intent
+    where domain = #{domain,jdbcType=VARCHAR}
+      and intent = #{intent,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.rokid.soa.bo.manage.IntentKey" >
+    delete from rokid_intent
+    where domain = #{domain,jdbcType=VARCHAR}
+      and intent = #{intent,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.Intent" >
+    insert into rokid_intent (domain, intent, type, ver
+      )
+    values (#{domain,jdbcType=VARCHAR}, #{intent,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{ver,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.Intent" >
+    insert into rokid_intent
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="domain != null" >
+        domain,
+      </if>
+      <if test="intent != null" >
+        intent,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="ver != null" >
+        ver,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="ver != null" >
+        #{ver,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.Intent" >
+    update rokid_intent
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="ver != null" >
+        ver = #{ver,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where domain = #{domain,jdbcType=VARCHAR}
+      and intent = #{intent,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.Intent" >
+    update rokid_intent
+    set type = #{type,jdbcType=INTEGER}, ver = #{ver,jdbcType=VARCHAR}
+    where domain = #{domain,jdbcType=VARCHAR}
+      and intent = #{intent,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="com.rokid.soa.bo.manage.Intent" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_intent
+    <where>
+    	<if test="param1 != null">
+    		and domain = #{param1}
+    	</if>
+    	<if test="param2 != null">
+    		and type = #{param2}
+    	</if>
+    </where>
+    order by type 
+  </select>
+  
+  <update id="deleteSync">
+    delete from rokid_intent
+    where type = 1
+      and IFNULL(ver, '') != #{param1}
+  </update>
+</mapper>

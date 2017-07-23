@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rokid.soa.mapper.biaozhu.AnswerMapper">
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.Answer">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="version" jdbcType="BIGINT" property="version" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="avatar" jdbcType="VARCHAR" property="avatar" />
+    <result column="emotion" jdbcType="VARCHAR" property="emotion" />
+    <result column="chat_id" jdbcType="BIGINT" property="chatId" />
+    <result column="crt_id" jdbcType="VARCHAR" property="crtId" />
+    <result column="crt_time" jdbcType="BIGINT" property="crtTime" />
+    <result column="upd_id" jdbcType="VARCHAR" property="updId" />
+    <result column="upd_time" jdbcType="BIGINT" property="updTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, version, name, avatar, emotion, chat_id, crt_id, crt_time, upd_id, upd_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_answer
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from rokid_answer
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.rokid.soa.bo.biaozhu.Answer">
+    insert into rokid_answer (id, version, name, 
+      avatar, emotion, chat_id, 
+      crt_id, crt_time, upd_id, 
+      upd_time)
+    values (#{id,jdbcType=BIGINT}, #{version,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, 
+      #{avatar,jdbcType=VARCHAR}, #{emotion,jdbcType=VARCHAR}, #{chatId,jdbcType=BIGINT}, 
+      #{crtId,jdbcType=VARCHAR}, #{crtTime,jdbcType=BIGINT}, #{updId,jdbcType=VARCHAR}, 
+      #{updTime,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.Answer">
+    insert into rokid_answer
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="avatar != null">
+        avatar,
+      </if>
+      <if test="emotion != null">
+        emotion,
+      </if>
+      <if test="chatId != null">
+        chat_id,
+      </if>
+      <if test="crtId != null">
+        crt_id,
+      </if>
+      <if test="crtTime != null">
+        crt_time,
+      </if>
+      <if test="updId != null">
+        upd_id,
+      </if>
+      <if test="updTime != null">
+        upd_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="emotion != null">
+        #{emotion,jdbcType=VARCHAR},
+      </if>
+      <if test="chatId != null">
+        #{chatId,jdbcType=BIGINT},
+      </if>
+      <if test="crtId != null">
+        #{crtId,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null">
+        #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        #{updId,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.Answer">
+    update rokid_answer
+    <set>
+      <if test="version != null">
+        version = #{version,jdbcType=BIGINT},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="avatar != null">
+        avatar = #{avatar,jdbcType=VARCHAR},
+      </if>
+      <if test="emotion != null">
+        emotion = #{emotion,jdbcType=VARCHAR},
+      </if>
+      <if test="chatId != null">
+        chat_id = #{chatId,jdbcType=BIGINT},
+      </if>
+      <if test="crtId != null">
+        crt_id = #{crtId,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null">
+        crt_time = #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        upd_id = #{updId,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null">
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.Answer">
+    update rokid_answer
+    set version = #{version,jdbcType=BIGINT},
+      name = #{name,jdbcType=VARCHAR},
+      avatar = #{avatar,jdbcType=VARCHAR},
+      emotion = #{emotion,jdbcType=VARCHAR},
+      chat_id = #{chatId,jdbcType=BIGINT},
+      crt_id = #{crtId,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=BIGINT},
+      upd_id = #{updId,jdbcType=VARCHAR},
+      upd_time = #{updTime,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <select id="listAnswer" resultMap="BaseResultMap">
+  	select 
+    	id, name
+    from rokid_answer r
+  	where (chat_id = #{_parameter})  	
+   order by r.id desc
+  </select>
+  
+  <delete id="deleteByChatId">
+    delete from rokid_answer
+    where chat_id = #{_parameter}
+  </delete>
+  
+  <!-- 是否已存在-->
+  <select id="nameCount" resultType="int">
+  	select 
+    	count(id)
+    from rokid_answer
+    where name = #{param1}
+    <if test="param2 != null">
+    	and id != #{param2}
+    </if>
+  </select>
+</mapper>

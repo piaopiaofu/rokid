@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+<style>
+.dot-top {  
+    font-size: 0;  
+    line-height: 0;  
+    border-width: 7px;  
+    border-color: blank;  
+    border-top-width: 0;  
+    border-style: dashed;  
+    border-bottom-style: solid;  
+    border-left-color: transparent;  
+    border-right-color: transparent; 
+}
+/* 向下的箭头 */  
+.dot-bottom {  
+    font-size: 0;  
+    line-height: 0;  
+    border-width: 7px;  
+    border-color: blank;  
+    border-bottom-width: 0;  
+    border-style: dashed;  
+    border-top-style: solid;  
+    border-left-color: transparent;  
+    border-right-color: transparent;  
+}  
+</style>
+</head>
+<body ng-controller="rokid_yuyin">
+<!--语音标注-->
+<div class="son-page">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th width="140" ng-show="admin">
+					<span style="float:left;">
+						标注者
+					</span>
+					<span style="float:left;">
+						<select style="width:90px" class="layui-input-top" ng-model="key.user" ng-keyup="keyEnter($event)" onchange='$("#search").focus();'>
+							<option value="">全部</option>
+							<option ng-repeat="row in listUser" value="{{row.id}}" ng-selected="key.user==row.id">{{row.name}}</option>
+						</select>
+					</span>
+				</th>
+				<th width="140" ng-show="admin">
+					<span style="float:left;">
+						机器码	
+					</span>
+					<span style="float:left;">			
+						<select class="layui-input-top" style="width:90px;" ng-model="key.snsel" ng-change="key.sn=key.snsel" onchange='$("#sn").focus();'>  
+					        <option value="01">01</option>  
+					        <option value="02">02</option> 
+					    </select>  
+						<input class="layui-input-top" type="text" id="sn" placeholder="机器码" style="position:relative;margin-left:-90px;width:70px;border:0pt;height:22px;" ng-model="key.sn" ng-keyup="keyEnter($event)">
+					</span>    
+				</th>
+				<th width="215" ng-show="admin">
+					<span style="float:left;">时间</span>
+					<span style="float:left;"><input class="layui-input-top" id='start' placeholder="开始时间" ng-click="chgDate('start')" type="text" style='width:80px;' ng-model="key.start" ng-keyup="keyEnter($event)"></span>
+					<span style="float:left;">~</span>
+					<span style="float:left;"><input class="layui-input-top" id='end' placeholder="结束时间" ng-click="chgDate('end')" type="text" style='width:80px;' ng-model="key.end" ng-keyup="keyEnter($event)"></span>
+				</th>
+				<th ng-show="admin" style="width:190px;">录音</th>
+				<th ng-show="!admin" style="width:400px;">录音</th>
+				<th>
+					<span style="float:left;">	
+						标注
+					</span>
+					<span style="float:left;">
+						<select class="layui-input-top" ng-model="key.type" ng-show="admin" ng-keyup="keyEnter($event)" onchange='$("#search").focus();'>
+							<option value="">全部</option>
+							<option value="8">男</option>
+							<option value="4">女</option>
+							<option value="2">幼</option>
+							<option value="11">环境音(非人声)</option>
+							<option value="12">误激活(人声)</option>
+							<option value="13">若琪自己的声音激活</option>
+						</select>
+					</span>
+					<span style="float:left;">
+						<input type="button" id='search' class="layui-input-top" ng-show="admin" value="　查　询 　" ng-click="search();">
+					</span>
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in list" ng-show="list" id="{{row.id}}">
+				<td ng-show="admin">{{row.updName}}</td>
+				<td ng-show="admin">{{row.sn}}</td>
+				<td ng-show="admin">{{row.time | date:'yyyy-MM-dd HH:mm:ss'}}</td>
+				<td>
+					<audio id="{{$index}}" style="width:98%" controls></audio>
+				</td>
+				<td>
+					<span class="layui-breadcrumb" style="visibility:visible;">
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'8')" ng-class="row.type==8?'Sel':'Nol'">男</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'4')" ng-class="row.type==4?'Sel':'Nol'">女</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'2')" ng-class="row.type==2?'Sel':'Nol'">幼</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'11')" ng-class="row.type==11?'Sel':'Nol'">环境音(非人声)</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'12')" ng-class="row.type==12?'Sel':'Nol'">误激活(人声)</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'13')" ng-class="row.type==13?'Sel':'Nol'">若琪自己的声音</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="update(row,'-1')" ng-show="row.editAdmin == 1 && admin" ng-class="Nol">恢复</button>
+						<button class="layui-btn layui-btn-normal layui-btn-small" ng-click="errWav(row)" ng-show="!row.type">无法播放</button>									
+					</span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<span ng-show="list.length==0">
+		没有数据!
+	</span>
+	<!--分页-->
+	<div id="page-wp" class="page-wp" ng-show="admin">
+		<div class="layui-box layui-laypage layui-laypage-default">
+			<a href="javascript:;" class="layui-laypage-prev" ng-click="page.go('prev')">上一页</a>			
+			<a href="#" ng-repeat="row in page.pagination" ng-class="{'on':page.current==row.page}" ng-click="page.go(row.page)">{{row.text}}</a>			
+			<a href="javascript:;" class="layui-laypage-next" ng-click="page.go('next')">下一页</a>
+			<span class="layui-laypage-total">　<input type="number" ng-model="page.current" class="layui-laypage-skip"><button type="button" class="layui-laypage-btn" ng-click="page.go(page.current)">确定</button></span>
+		</div>
+	</div>
+	<div id="page-wp" class="page-wp" ng-show="!admin">
+		<button class="layui-btn layui-btn-normal" ng-click="getWork=true;page.go(1)">获取标注数据</button>
+		<button class="layui-btn layui-btn-normal" ng-click="getWork=false;page.go(1)">刷新</button>
+	</div>
+	<!--分页-end-->
+</div>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_voice.js"></script>
+</body>
+</html>

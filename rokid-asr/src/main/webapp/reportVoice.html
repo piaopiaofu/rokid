@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+</head>
+<body ng-controller="rokid_tongji">
+<span ng-show="type=1;"></span>
+<br>
+<table class="table table-bordered">
+	<thead><tr><th colspan="4">语音激活统计</th></tr><thead>
+	<tbody class="layui-form">		
+		<tr>
+			<td width="310">
+				<div class="layui-form-item">
+					<label class="layui-form-label">统计方式</label>
+					<div class="layui-input-inline" style="width:110px;">
+						<select class="layui-input" id="dateType" ng-model="key.dateType">
+							<option value="y">按年统计</option>
+							<option value="m">按月统计</option>
+							<option value="w">按周统计</option>
+							<option value="d">按日统计</option>
+							<!-- <option value="h">按小时统计</option> -->
+						</select>
+					</div>
+
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-inline" style="width:165px;">
+						<input type="text" name="startDate" id="startDate" class="layui-input" placeholder="开始时间"  ng-click="chgDate()" ng-model="key.startDate">
+					</div>
+
+					<label style="float:left;padding:6px 0px;text-align:center;">~&nbsp;</label>
+					<div class="layui-input-inline" style="width:165px;">
+						<input type="text" name="endDate" id="endDate" class="layui-input" placeholder="结束时间"  ng-click="chgDate()" ng-model="key.endDate">
+					</div>
+
+					<label class="layui-form-label">机器号</label>
+					<div class="layui-input-inline" style="width:140px;">						
+						<select class="layui-input" style="width:140px;" ng-model="key.snsel" ng-change="key.sn=key.snsel" onchange='$("#sn").focus();'>  
+					        <option value="01">01</option>  
+					        <option value="02">02</option> 
+					    </select>  
+						<input class="layui-inputp" type="text" id="sn" placeholder="机器码" style="position:absolute;margin-top:-34px;margin-left:5px;width:120px;border:0pt;height:30px;" ng-model="key.sn" ng-keyup="keyEnter($event)">
+					</div>
+					<label class="layui-form-ck">
+						<input type="checkbox" ng-model="key.isSn">
+						<div style='display:none' class="layui-unselect layui-form-checkbox" ng-class="{1:'layui-form-checked'}[key.isSn]">
+							<span>分组</span>
+							<i class="layui-icon"></i>
+						</div>
+					</label>
+					
+					<button class="layui-btn layui-btn-normal" ng-click="voice()">　统　计　</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th><label ng-show="key2.dateType == 'w'">周</label><label ng-show="key2.dateType != 'w'">日期</label></th>
+			<th>男</th>
+			<th>女</th>
+			<th>幼</th>
+			<th>环境音(非人声)</th>
+			<th>误激活(人声)</th>			
+			<th>若琪自己的声音激活</th>
+			<th>已标注的总数</th>
+			<th ng-show='false'>未标</th>
+			<th ng-show='false'>总数</th>
+			<th>误激活率</th>
+			<th>合计值</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="row in list" class="ng-cloak">
+			<td>{{row.time}}</td>
+			<td>{{row.male}}</td>
+			<td>{{row.female}}</td>
+			<td>{{row.young}}</td>
+			<td>{{row.env}}</td>
+			<td>{{row.error}}</td>			
+			<td>{{row.takki}}</td>
+			<td>{{row.male + row.female + row.young + row.env + row.error + row.takki}}</td>
+			<td ng-show='false'>{{row.noMarked}}</td>
+			<td ng-show='false'>{{row.allData}}</td>
+			<td>{{row.rate||0}}</td>
+			<td ng-if="$index == 0" rowspan="{{list.length}}">
+				获取的数据总数：{{allData}}<br>
+				未标的数据总数：{{noMarked}}
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_report.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

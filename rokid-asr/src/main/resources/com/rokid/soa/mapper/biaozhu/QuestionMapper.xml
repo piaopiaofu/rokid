@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rokid.soa.mapper.biaozhu.QuestionMapper">
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.Question">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="time" jdbcType="BIGINT" property="time" />
+    <result column="sn" jdbcType="VARCHAR" property="sn" />
+    <result column="topic" jdbcType="VARCHAR" property="topic" />
+    <result column="chat_id" jdbcType="VARCHAR" property="chatId" />
+    <result column="chat_name" jdbcType="VARCHAR" property="chatName" />
+    <result column="assign_id" jdbcType="VARCHAR" property="assignId" />
+    <result column="upd_time" jdbcType="BIGINT" property="updTime" />
+    <result column="upd_id" jdbcType="VARCHAR" property="updId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, time, sn, version, topic, chat_id, assign_id, upd_time, upd_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_question
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from rokid_question
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.rokid.soa.bo.biaozhu.Question">
+    insert into rokid_question (id, time,  
+      sn, version, topic, chat_id, assign_id, 
+      upd_time, upd_id)
+    values (#{id,jdbcType=BIGINT}, #{time,jdbcType=BIGINT}, 
+      #{sn,jdbcType=VARCHAR}, #{version,jdbcType=VARCHAR}, #{topic,jdbcType=VARCHAR}, 
+      #{chatId,jdbcType=VARCHAR}, #{assignId,jdbcType=VARCHAR},
+      #{updTime,jdbcType=BIGINT}, #{updId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.Question">
+    insert into rokid_question
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="time != null">
+        time,
+      </if>
+      <if test="sn != null">
+        sn,
+      </if>
+      <if test="version != null">
+        version,
+      </if>
+      <if test="topic != null">
+        topic,
+      </if>
+      <if test="chatId != null">
+        chat_id,
+      </if>
+      <if test="assignId != null">
+        assign_id,
+      </if>
+      <if test="updTime != null">
+        upd_time,
+      </if>
+      <if test="updId != null">
+        upd_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="time != null">
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="sn != null">
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="version != null">
+        #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null">
+        #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="chatId != null">
+        #{chatId,jdbcType=VARCHAR},
+      </if>
+      <if test="assignId != null">
+        #{assignId,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null">
+        #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        #{updId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.Question">
+    update rokid_question
+    <set>
+      <if test="time != null">
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="sn != null">
+        sn = #{sn,jdbcType=VARCHAR},
+      </if> 
+      <if test="version != null">
+        version = #{version,jdbcType=VARCHAR},
+      </if>
+      <if test="topic != null">
+        topic = #{topic,jdbcType=VARCHAR},
+      </if>
+      <if test="chatId != null">
+        chat_id = #{chatId,jdbcType=VARCHAR},
+        assign_id = null,
+      </if>     
+      <if test="assignId != null">
+        assign_id = #{assignId,jdbcType=VARCHAR},
+        chat_id = null,
+      </if>
+      <if test="updTime != null">
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null">
+        upd_id = #{updId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.Question">
+    update rokid_question
+    set time = #{time,jdbcType=BIGINT},
+      sn = #{sn,jdbcType=VARCHAR},
+      version = #{version,jdbcType=VARCHAR},
+      topic = #{topic,jdbcType=VARCHAR},
+      chat_id = #{chatId,jdbcType=VARCHAR},
+      assign_id = #{assignId,jdbcType=VARCHAR},
+      upd_time = #{updTime,jdbcType=BIGINT},
+      upd_id = #{updId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  
+  <!-- 查询一栏 -->
+  <select id="listCount" resultType="int">
+  	select 
+    	count(id)
+    from rokid_question
+    <if test="_parameter != null">
+    	where (upd_id = #{_parameter})  	
+    </if>
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select 
+    	r.id, r.time, r.topic, r.chat_id, r.assign_id, r.upd_id
+    from rokid_question r
+    <if test="param1 != null">
+    	where (upd_id = #{param1})  
+    	  and r.upd_time is null	
+    </if>
+   order by r.id
+   <if test="param2 != null and param3 != null">
+	limit #{param2},#{param3}
+   </if>
+  </select>
+  
+  <!-- 查询关联话题数据 -->
+  <select id="listQuestion" resultMap="BaseResultMap">
+  	select 
+    	id, topic
+    from rokid_question r
+  	where (chat_id = #{_parameter})  	
+   order by r.id desc
+  </select>
+  
+  <!-- 更新指派数据 -->
+  <update id="updateWorkIdByDay">
+    update rokid_question
+    set work_id = #{param3} 
+    where time <![CDATA[ >= ]]> #{param1} 
+      and time <![CDATA[ <= ]]> #{param2} 
+      and upd_id is null
+      and upd_time is null
+  </update>
+  <update id="updateWorkIdByMonth">
+    update rokid_question
+    set work_id = #{param3} 
+    where time <![CDATA[ >= ]]> #{param1} 
+      and time <![CDATA[ <= ]]> #{param2} 
+      and upd_id is null
+      and upd_time is null
+      and work_id is null
+  </update>
+  <update id="deleteWorkIdByDay">
+    update rokid_question
+    set work_id = null
+    where time <![CDATA[ >= ]]> #{param1} 
+      and time <![CDATA[ <= ]]> #{param2} 
+      and upd_id is null
+      and upd_time is not null
+      and work_id = #{param3}
+  </update>
+  <update id="deleteWorkIdByMonth">
+    update rokid_question
+    set work_id = null
+    where time <![CDATA[ >= ]]> #{param1} 
+      and time <![CDATA[ <= ]]> #{param2} 
+      and upd_id is null
+      and upd_time is not null
+      and work_id = #{param3}
+  </update>
+  
+  <!-- 关联指派数据获取数据 -->
+  <update id="getWorkRecordByWorkId">
+    update rokid_question
+       set upd_id = #{param4} 
+     where time <![CDATA[ >= ]]> #{param1} 
+       and time <![CDATA[ <= ]]> #{param2} 
+       and upd_id is null
+       and upd_time is null
+       and work_id = #{param3}
+       order by time
+       limit 10
+  </update>
+  <!-- 正常指派数据获取数据 -->
+  <update id="getWorkRecordByNormal">
+    update rokid_question
+       set upd_id = #{_parameter}
+     where upd_id is null
+       and upd_time is null
+       and work_id is null
+       order by time
+       limit 10
+  </update>
+  
+  <update id="updateNoMarkById">
+    update rokid_question
+    set chat_id = null,
+      assign_id = null,
+      upd_time = null,
+      upd_id = null
+    where id = #{_parameter}
+  </update>
+  
+  <update id="updateNoMarkByChatId" >
+  	update rokid_question set
+  	   chat_id = null,
+  	   assign_id = null,
+  	   upd_time = null,
+  	   upd_id = null
+  	 where chat_id = #{_parameter}
+  </update>
+  
+  <!-- 是否已存在-->
+  <select id="nameCount" resultType="int">
+  	select 
+    	count(id)
+    from rokid_question
+    where topic = #{param1}
+    <if test="param2 != null">
+    	and id != #{param2}
+    </if>
+  </select>
+</mapper>

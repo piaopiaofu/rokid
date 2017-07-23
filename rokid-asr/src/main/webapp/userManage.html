@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+<style type="text/css">
+.layui-form-label{width:50px;}
+.boxmsg .wp{margin-left:-250px;width:500px;}
+</style>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_user.js"></script>
+</head>
+<body ng-controller="rokid_user">
+<!--用户管理-->
+
+<div class="son-page">
+<form class="layui-form layui-form-pane" action="">
+	<table class="table table-bordered">
+		<thead>
+			<tr>
+				<th style="width:150px;">标注者</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody class="middle">
+			<tr ng-repeat="row in list">
+				<td>{{row.user}}</td>
+				<td>
+					<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="detail.show(row)">
+						标注详情
+					</a>
+					<a ng-show="row.isValid" class="layui-btn layui-btn-normal layui-btn-small" ng-click="update('valid',row)">
+						禁 用
+					</a>
+					<a ng-show="!row.isValid" class="layui-btn layui-btn-normal layui-btn-small" style="background:#cccccc" ng-click="update('valid',row)">
+						开 启
+					</a>
+					<a class="layui-btn layui-btn-small layui-btn-danger" ng-click="update('delete',row)">
+						删 除
+					</a>
+					<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="update('load',row)">
+						修 改
+					</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<a class="layui-btn layui-btn-normal" ng-click="update('',userInfo)">新建标注者</a>
+	<!--分页-->
+	<div id="page-wp" class="page-wp">
+		<div class="layui-box layui-laypage layui-laypage-default">
+			<a href="javascript:;" class="layui-laypage-prev" ng-click="page.go('prev')">上一页</a>			
+			<a href="#" ng-repeat="row in page.pagination" ng-class="{'on':page.current==row.page}" ng-click="page.go(row.page)">{{row.text}}</a>			
+			<a href="javascript:;" class="layui-laypage-next" ng-click="page.go('next')">下一页</a>
+			<span class="layui-laypage-total">到第 <input type="number" ng-model="page.current" class="layui-laypage-skip"> 页 <button type="button" class="layui-laypage-btn" ng-click="page.go(page.current)">确定</button></span>
+		</div>
+	</div>
+	<!--分页-end-->
+</form>
+</div>
+
+
+<!--标注详情-->
+<div class="boxmsg ng-cloak" ng-show="boxmsg.detail">
+<div class="bg"></div>
+	<div class="wp">
+	<div class="layui-form">
+		<div style="padding-top:0px;">
+			<div class="blk" style="background:#D6D8DE;float:left;width:100%;padding:7px 0px;margin-bottom:15px;">
+				<h3 class="title" style="float:left;padding-left:8px;">用户管理</h3>
+				<span class="layui-icon" ng-click="boxmsg.detail=0" style="font-size:20px;float:right;cursor:hand;padding-right:5px;" title="关闭">&#x1006;</span>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width:110px;">用户</label>
+				<div class="layui-input-inline">
+					<input type="text" readonly ng-model="countUser" class="layui-input" style='border:0px;font-weight:bold'>
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width:110px;">统计年月</label>
+				<div class="layui-input-inline" style="width:110px;">
+					<input type="text" id="start" class="layui-input" placeholder="开始时间" ng-click="chgDate('start')">
+				</div>
+				<label style="float:left;padding:8px 4px;">~ &nbsp;</label>
+				<div class="layui-input-inline" style="width:110px;">
+					<input type="text" id="end" class="layui-input" placeholder="结束时间" ng-click="chgDate('end')">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width:110px;">语音激活</label>
+				<div class="layui-input-inline" style="width:82px;">
+					<input type="text" disabled ng-model="countInfo.voiceCnt" class="layui-input">
+				</div>
+				<label class="layui-form-label">错误数</label>
+				<div class="layui-input-inline" style="width:82px;">
+					<input type="text" disabled ng-model="countInfo.voiceErrCnt" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label" style="width:110px;">语音识别</label>
+				<div class="layui-input-inline" style="width:82px;">
+					<input type="text" disabled ng-model="countInfo.asrCnt" class="layui-input">
+				</div>
+				<label class="layui-form-label">错误数</label>
+				<div class="layui-input-inline" style="width:82px;">
+					<input type="text" disabled ng-model="countInfo.asrErrCnt" class="layui-input">
+				</div>
+			</div>
+			
+			<br><br>
+		</div>
+	</div>
+
+	<div class="button-wp">
+		<a class="layui-btn layui-btn-normal layui-btn-danger" ng-click="detail.search()">统计</a>
+		<a class="layui-btn layui-btn-normal colse" ng-click="boxmsg.detail=0" ng-show="false">关闭</a>		
+	</div>
+	</div>
+</div>
+<!--标注详情-end-->
+
+<!--新建标注-->
+<div class="boxmsg ng-cloak" ng-show="boxmsg.add">
+<div class="bg"></div>
+	<div class="wp layui-form" style="padding-top:0px;">
+	<form name="reg">
+	<div>
+		<div class="blk" style="background:#D6D8DE;float:left;width:100%;padding:7px 0px;margin-bottom:15px;">
+			<h3 class="title" style="float:left;padding-left:8px;">用户管理</h3>
+			<span class="layui-icon" ng-click="boxmsg.add=0" style="font-size:20px;float:right;cursor:hand;padding-right:5px;" title="关闭">&#x1006;</span>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style='width:120px;'>用户名</label>
+			<div class="layui-input-inline">
+				<input type="text"  maxlength="20"  ng-model="userInfo.user" required class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style='width:120px;'>用户昵称</label>
+			<div class="layui-input-inline">
+				<input type="text"  maxlength="20"  ng-model="userInfo.nick" required class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style='width:120px;'>用户类型</label>
+			<div class="layui-input-inline">
+				<label class="layui-unselect layui-form-radio">
+					<input type="radio" ng-model="userInfo.type" name="type" value="1">
+					<i class="layui-anim layui-icon">&#xe63f;</i>
+					<span>管理员</span>
+				</label>
+
+				<label class="layui-unselect layui-form-radio">
+					<input type="radio" ng-model="userInfo.type" name="type" value="2">
+					<i class="layui-anim layui-icon">&#xe63f;</i>
+					<span>标注者</span>
+				</label>
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label" style='width:120px;'>登录密码</label>
+			<div class="layui-input-inline">
+				<input type="password"  maxlength="20" ng-model="userInfo.password" required class="layui-input">
+			</div>
+		</div>
+		<br>
+	</div>
+
+	<div class="button-wp">
+		<button class="layui-btn layui-btn-normal layui-btn-danger" ng-show="!userInfo.id" ng-click="update('add',userInfo)">添加</button>
+		<button class="layui-btn layui-btn-normal layui-btn-danger" ng-show="userInfo.id" ng-click="update('update',userInfo)">修改</button>
+	</div>
+	</div>
+	</form>
+</div>
+<!--新建标注-end-->
+</body>
+</html>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="10 seconds" debug="true">
+
+    <substitutionProperty name="log.base" value="/opt/logs/tomcat/rokid-server" />  
+    <jmxConfigurator />  
+    <timestamp key="byDay" datePattern="yyyy-MM-dd" />
+    
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[rokid]%date %level %10logger [%file:%line] %msg%n</pattern>
+		</layout>
+	</appender>
+	
+    <appender name="logfile" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${log.base}/logs/rokid.log</file>
+		<append>true</append>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${log.base}/logs/rokid.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<maxHistory>7</maxHistory>
+		</rollingPolicy>
+		<layout class="ch.qos.logback.classic.PatternLayout">
+			<pattern>[rokid]%date %level [%thread] %10logger [%file:%line] %msg%n</pattern>
+		</layout>
+	</appender>
+	
+    <logger name="com.rokid" level="DEBUG" >
+        <appender-ref ref="logfile" />
+    </logger>
+	<logger name="java.sql.ResultSet" level="debug" /> 
+	<logger	name="org.apache.ibatis" level="debug" /> 
+	<logger	name="java.sql.PreparedStatement" level="debug" /> 
+	<logger	name="java.sql.Connection" level="debug" /> 
+	<logger name="org.mybatis.spring" level="debug" /> 
+	<logger name="org.apache.shiro" level="debug" /> 
+	
+	<root>  
+        <!--level value="INFO" />-->
+        <level value="DEBUG" /> 
+        <appender-ref ref="stdout" /> 
+        <appender-ref ref="logfile" />  
+    </root>  
+</configuration>

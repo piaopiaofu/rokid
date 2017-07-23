@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+</head>
+<body ng-controller="rokid_tongji">
+<br>
+<table class="table table-bordered">
+	<thead><tr><th colspan="4">聊天统计</th></tr><thead>
+	<tbody class="layui-form">		
+		<tr>
+			<td width="320">
+				<div class="layui-form-item">
+					<label class="layui-form-label">统计方式</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" id="dateType" ng-model="key.dateType">
+							<option value="y">按年统计</option>
+							<option value="m">按月统计</option>
+							<option value="d">按日统计</option>
+							<option value="h">按小时统计</option>
+						</select>
+					</div>
+				</div>
+			</td>
+			<td></td>
+			<td width="320" colspan="2">
+				<div class="layui-form-item">
+					<label class="layui-form-label">指派</label>
+					<div class="layui-input-inline">
+						<select class="layui-input" ng-model="key.assignId">
+							<option></option>
+							<option>chat</option>
+							<option>voice</option>
+							<option>music</option>
+						</select>
+					</div>
+					<label class="layui-form-ck">
+						<input type="checkbox" ng-model="key.isAssignId">
+						<div style='display:none' class="layui-unselect layui-form-checkbox" ng-class="{1:'layui-form-checked'}[key.isAssignId]">
+							<span>分组</span>
+							<i class="layui-icon"></i>
+						</div>
+					</label>
+				</div>
+			</td>
+			<td rowspan="3" valign="middle">
+				<button class="layui-btn layui-btn-warm" ng-click="chat()">统计</button>
+			</td>
+		</tr>
+		<tr>	
+			<td width="320">
+				<div class="layui-form-item">
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-inline">
+						<input type="text" name="startDate" id="startDate" class="layui-input" placeholder="开始时间"  ng-click="chgDate()" ng-model="key.startDate">
+					</div>
+				</div>
+			</td>
+			<td width="320">
+				<div class="layui-form-item">
+					<label class="layui-form-label">结束时间</label>
+					<div class="layui-input-inline">
+						<input type="text" name="endDate" id="endDate" class="layui-input" placeholder="结束时间"  ng-click="chgDate()" ng-model="key.endDate">
+					</div>
+				</div>
+			</td>
+			<td width="320">
+				<div class="layui-form-item">
+					<label class="layui-form-label">机器编码</label>
+					<div class="layui-input-inline">
+						<input type="text" maxlength="20"  class="layui-input" placeholder="机器编码"  ng-model="key.sn">
+					</div>
+					<label class="layui-form-ck">
+						<input type="checkbox" ng-model="key.isSn">
+						<div style='display:none' class="layui-unselect layui-form-checkbox" ng-class="{1:'layui-form-checked'}[key.isSn]">
+							<span>分组</span>
+							<i class="layui-icon"></i>
+						</div>
+					</label>
+				</div>
+			</td>			
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th ng-show="key2.sn||key2.isSn">机器编码</th>
+			<th>时间</th>
+			<th ng-show="key2.assignId||key2.isAssignId">指派</th>			
+			<th>已标</th>
+			<th>未标</th>
+			<th>全部</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="row in list" class="ng-cloak">
+			<td ng-show="key2.sn||key2.isSn">{{row.sn}}</td>
+			<td>{{row.time}}</td>
+			<td ng-show="key2.assignId||key2.isAssignId">{{row.assignId}}</td>			
+			<td>{{row.marked}}</td>
+			<td>{{row.noMarked}}</td>
+			<td>{{row.allData}}</td>
+		</tr>
+	</tbody>
+</table>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_report.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

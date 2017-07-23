@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.User" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="nick" property="nick" jdbcType="VARCHAR" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+    <result column="passwd" property="passwd" jdbcType="VARCHAR" />
+    <result column="crt_time" property="crtTime" jdbcType="BIGINT" />
+    <result column="login_time" property="loginTime" jdbcType="BIGINT" />
+    <result column="is_valid" property="isValid" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, nick, user, passwd, crt_time, login_time, is_valid
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_user
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.User" >
+    insert into rokid_user (id, type, nick, 
+      user, passwd, crt_time, 
+      login_time, is_valid)
+    values (#{id,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{nick,jdbcType=VARCHAR}, 
+      #{user,jdbcType=VARCHAR}, #{passwd,jdbcType=VARCHAR}, #{crtTime,jdbcType=BIGINT}, 
+      #{loginTime,jdbcType=BIGINT}, #{isValid,jdbcType=SMALLINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.User" >
+    insert into rokid_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="nick != null" >
+        nick,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="passwd != null" >
+        passwd,
+      </if>
+      <if test="crtTime != null" >
+        crt_time,
+      </if>
+      <if test="loginTime != null" >
+        login_time,
+      </if>
+      <if test="isValid != null" >
+        is_valid,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="nick != null" >
+        #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="loginTime != null" >
+        #{loginTime,jdbcType=BIGINT},
+      </if>
+      <if test="isValid != null" >
+        #{isValid,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.User" >
+    update rokid_user
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="nick != null" >
+        nick = #{nick,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="passwd != null" >
+        passwd = #{passwd,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        crt_time = #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="loginTime != null" >
+        login_time = #{loginTime,jdbcType=BIGINT},
+      </if>
+      <if test="isValid != null" >
+        is_valid = #{isValid,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.User" >
+    update rokid_user
+    set type = #{type,jdbcType=SMALLINT},
+      nick = #{nick,jdbcType=VARCHAR},
+      user = #{user,jdbcType=VARCHAR},
+      passwd = #{passwd,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=BIGINT},
+      login_time = #{loginTime,jdbcType=BIGINT},
+      is_valid = #{isValid,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 用户登陆 -->
+  <select resultMap="BaseResultMap" id="login">
+  	select 
+    <include refid="Base_Column_List" />
+    from rokid_user
+    where user = #{param1}
+      and passwd = #{param2}
+  </select>
+  
+  <!-- 检查用户名是否存在-->
+  <select resultType="int" id="checkUser">
+  	select count(id)
+    from rokid_user
+    where user = #{param1}
+  </select>
+  
+  <!-- 一栏处理 -->
+  <select id="listCount" resultType="int" >
+  	select 
+    	count(id)
+    from rokid_user
+    <where>
+    	<if test="param2 != null">
+	    	and is_valid = #{param2}
+	    	and type = 2
+	    </if>
+	    <if test="param1 != null">
+	    	and user like CONCAT('%',#{param1},'%')
+	    </if>
+    </where>
+  </select>
+  <select resultMap="BaseResultMap" id="list">
+  	select 
+    <include refid="Base_Column_List" />
+    from rokid_user
+    <where>
+    	<if test="param4 != null">
+	    	and is_valid = #{param4}
+	    	and type = 2
+	    </if>
+	    <if test="param1 != null">
+	    	and user like CONCAT('%',#{param1},'%')
+	    </if>
+    </where>
+   order by crt_time desc 
+   <if test="param2 != null and param3 != null">
+	limit #{param2},#{param3}
+   </if>
+  </select>
+  
+  <select resultType="com.rokid.soa.vo.manage.IdNameVo" id="idNameList">
+  	select id, user as name
+    from rokid_user
+    <where>
+    	and is_valid = 1
+    </where>
+  </select>
+  
+</mapper>

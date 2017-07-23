@@ -1,0 +1,176 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<script type="text/javascript" src="/js/jquery-1.7.2.js"></script>
+<script type="text/javascript" src="/js/common.js"></script>
+<script>
+	var mydata = "";
+	var connect = "";
+	function list(){
+		connect = "/manage/user/v1/list"; 
+		mydata = $("#list").val();
+		postJson(connect, mydata, "list");
+	}
+	
+	function login(){
+		connect = "/manage/user/v1/login"; 
+		mydata = $("#login").val();
+		postJson(connect, mydata, "login");
+	}
+	
+	function insert(){
+		connect = "/manage/user/v1/update"; 
+		mydata = $("#insert").val();
+		postJson(connect, mydata, "insert");
+	}
+	
+	function update(){
+		connect = "/manage/user/v1/update"; 
+		mydata = $("#update").val();
+		postJson(connect, mydata, "update");
+	}
+	
+	function valid(){
+		connect = "/manage/user/v1/update"; 
+		mydata = $("#valid").val();
+		postJson(connect, mydata, "valid");
+	}
+	
+	function delete1(){
+		connect = "/manage/user/v1/delete"; 
+		mydata = $("#delete").val();
+		postJson(connect, mydata, "delete");
+	}
+	
+	function count(){
+		connect = "/manage/count/v1/userYm"; 
+		mydata = $("#count").val();
+		postJson(connect, mydata, "userYm");
+	}
+	
+	function repAsr(){
+		connect = "/manage/report/v1/asrNlp"; 
+		mydata = $("#repAsr").val();
+		postJson(connect, mydata, "repAsr");
+	}
+	
+	function returnDate(json, opt){
+		$("#dvReturnContent").remove();
+		if(json.code == 0){
+			//alert(json.message);
+		}
+		$("body").append("<div id='dvReturnContent' style='word-break:break-all;'>地址为："+ baseUrl + connect + "</br>参数为：" + postDate + "</br></br>返回结果：   操作方法："+opt+"</br>" + JSON.stringify(json) + "</br></br></br></div>");
+	}
+
+</script>
+</head>
+<body>
+<h1>用户管理</h1><br>
+<textarea id="login" style="width:900px;height:23px;">"userName":"tongxf","password":"123456"</textarea><br>
+<a href="javascript:login();void(0);">用户登录</a> 返回值loginTime指最后登陆时间  type[1:管理员 2:普通标注用户]<br><br>
+
+<textarea id="insert" style="width:900px;height:22px;">"userName":"tongxf","password":"123456","type":2,"nick":"用户昵称"</textarea><br>
+<a href="javascript:insert();void(0);">添加用户</a>  type[1:管理员   2:普通标注用户]<br><br>
+
+<textarea id="update" style="width:900px;height:22px;">"id":"4109a93e9c2444929845d264fda34da8","userName":"tongxf","password":"123456","type":2,"nick":"用户昵称"</textarea><br>
+<a href="javascript:update();void(0);">修改用户</a>  type[1:管理员   2:普通标注用户]&nbsp; 如修改密码：只需要传人id及password,即传id及要修改的值就可以<br><br> 
+
+<textarea id="valid" style="width:900px;height:22px;">"id":"4109a93e9c2444929845d264fda34da9","isValid":1</textarea><br>
+<a href="javascript:valid();void(0);">设置有效无效</a>  isValid[1:有效   0:无效]<br><br>
+
+<textarea id="delete" style="width:900px;height:22px;">"id":"afa1001dd55f44d7947b4f67c68e1867"</textarea><br>
+<a href="javascript:delete1();void(0);">删除用户</a><br><br>
+
+<textarea id="list" style="width:900px;height:22px;">"page":1</textarea><br>
+<a href="javascript:list();void(0);">一览</a><br><br>
+
+<textarea id="count" style="width:900px;height:22px;">"userId":"4109a93e9c2444929845d264fda34da9","yyyy":"2016","mm":"10"</textarea><br>
+<a href="javascript:count();void(0);">用户按月统计标注数量</a><br><br>
+
+<script>
+	function bz_voice_list(){
+		connect = "/biaozhu/voice/v1/list"; 
+		mydata = $("#bz_voice_list").val();
+		postJson(connect, mydata, "bz_voice_list");
+	}
+	
+	function bz_voice_update(){
+		connect = "/biaozhu/voice/v1/update"; 
+		mydata = $("#bz_voice_update").val();
+		postJson(connect, mydata, "bz_voice_update");
+	}
+	
+	function bz_asr_list(){
+		connect = "/biaozhu/asrnlp/v1/list"; 
+		mydata = $("#bz_asr_list").val();
+		postJson(connect, mydata, "bz_asr_list");
+	}
+	
+	function bz_asr_update(){
+		connect = "/biaozhu/asrnlp/v1/update"; 
+		mydata = $("#bz_asr_update").val();
+		postJson(connect, mydata, "bz_asr_update");
+	}
+	
+	function bz_chat_list(){
+		connect = "/biaozhu/chat/v1/list"; 
+		mydata = $("#bz_chat_list").val();
+		postJson(connect, mydata, "bz_chat_list");
+	}
+	
+	function bz_chat_update(){
+		connect = "/biaozhu/chat/v1/update"; 
+		mydata = $("#bz_chat_update").val();
+		postJson(connect, mydata, "bz_chat_update");
+	}
+	
+	function bz_chat_filter_list(){
+		connect = "/biaozhu/filter/v1/list"; 
+		mydata = $("#bz_chat_filter_list").val();
+		postJson(connect, mydata, "bz_chat_filter_list");
+	}
+	
+	function bz_chat_filter_update(){
+		connect = "/biaozhu/filter/v1/update"; 
+		mydata = $("#bz_chat_filter_update").val();
+		postJson(connect, mydata, "bz_chat_filter_update");
+	}
+</script>
+
+<h1>语音标注</h1><br>
+<textarea id="bz_voice_list" style="width:900px;height:22px;"></textarea><br>
+<a href="javascript:bz_voice_list();void(0);">语音标注一栏</a><br><br>
+
+<textarea id="bz_voice_update" style="width:900px;height:22px;">"id":"22","type":1</textarea><br>
+<a href="javascript:bz_voice_update();void(0);">语音标注修改</a><br><br>
+
+<h1>ASRNLP标注</h1><br>
+<textarea id="bz_asr_list" style="width:900px;height:22px;"></textarea><br>
+<a href="javascript:bz_asr_list();void(0);">ASRNLP标注一栏</a><br><br>
+
+<textarea id="bz_asr_update" style="width:900px;height:22px;">"id":"21","domain":"domain","intent":"intent","slot":"slot","type":1,"type":1</textarea><br>
+<a href="javascript:bz_asr_update();void(0);">ASRNLP标注修改</a><br><br>
+
+<h1>聊天标注</h1><br>
+<textarea id="bz_chat_list" style="width:900px;height:22px;"></textarea><br>
+<a href="javascript:bz_chat_list();void(0);">聊天标注一栏</a><br><br>
+
+<textarea id="bz_chat_update" style="width:900px;height:22px;">"id":"21","assignId":"assignId","question":"question","answer":"answer"</textarea><br>
+<a href="javascript:bz_chat_update();void(0);">聊天标注修改</a><br><br>
+
+<h1>聊天Filter</h1><br>
+<textarea id="bz_chat_filter_list" style="width:900px;height:22px;"></textarea><br>
+<a href="javascript:bz_chat_filter_list();void(0);">聊天Filter一栏</a><br><br>
+
+<textarea id="bz_chat_filter_update" style="width:900px;height:22px;">"name":"话题1","score":9.0</textarea><br>
+<a href="javascript:bz_chat_filter_update();void(0);">聊天Filter添加</a><br><br>
+
+<h1>统计</h1><br>
+<textarea id="repAsr" style="width:900px;height:22px;"></textarea><br>
+<a href="javascript:repAsr();void(0);">asrnlp 统计</a><br><br>
+
+
+<div id="dvReturnContent"></div>
+</body>
+</html>

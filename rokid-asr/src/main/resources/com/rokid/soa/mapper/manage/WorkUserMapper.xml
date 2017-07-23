@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.WorkUserMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.WorkUser" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="SMALLINT" />
+    <result column="work_id" property="workId" jdbcType="VARCHAR" />
+    <result column="user" property="user" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="workEnd" property="work_end" jdbcType="SMALLINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, work_id, user, type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_work_user
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_work_user
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.WorkUser" >
+    insert into rokid_work_user (id, work_id, user, type
+      )
+    values (#{id,jdbcType=VARCHAR}, #{workId,jdbcType=VARCHAR}, #{user,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.WorkUser" >
+    insert into rokid_work_user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="workId != null" >
+        work_id,
+      </if>
+      <if test="user != null" >
+        user,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="workId != null" >
+        #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.WorkUser" >
+    update rokid_work_user
+    <set >
+      <if test="workId != null" >
+        work_id = #{workId,jdbcType=VARCHAR},
+      </if>
+      <if test="user != null" >
+        user = #{user,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.WorkUser" >
+    update rokid_work_user
+    set work_id = #{workId,jdbcType=VARCHAR},
+      user = #{user,jdbcType=VARCHAR},
+      type = #{type,jdbcType=SMALLINT}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+   
+  <delete id="deleteByWorkId">
+  	delete from rokid_work_user where work_id = #{_parameter}
+  </delete>
+  
+  <update id="deleteByUserId">
+    delete from rokid_work_user where user = #{_parameter}
+  </update>
+  
+  <select id="selectWorkByUserId" resultMap="BaseResultMap">
+    select w.time, u.work_id
+    from rokid_work_user u
+    left join rokid_work w 
+      on u.work_id = w.id
+    where u.user = #{param1}
+      and u.type = #{param2}
+      <if test="param2 == 1">
+      	and w.voice_end is null 
+      </if> 
+      <if test="param2 == 2">
+      	and w.asr_end is null 
+      </if> 
+      <if test="param2 == 3">
+      	and w.chat_end is null 
+      </if>      
+     order by w.sort desc
+  </select>
+</mapper>

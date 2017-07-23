@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+</head>
+<body ng-controller="rokid_tongji">
+<br><span ng-show="type=2;"></span>
+<table class="table table-bordered">
+	<thead><tr><th colspan="1">语音识别统计</th></tr><thead>
+	<tbody class="layui-form">
+		<tr>
+			<td>
+				<div class="layui-form-item">
+					<label class="layui-form-label">统计方式</label>
+					<div class="layui-input-inline" style="width:110px;">
+						<select class="layui-input" id="dateType" ng-model="key.dateType">
+							<option value="y">按年统计</option>
+							<option value="m">按月统计</option>
+							<option value="w">按周统计</option>
+							<option value="d">按日统计</option>
+							<!-- <option value="h">按小时统计</option> -->
+						</select>
+					</div>
+
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-inline" style="width:165px;">
+						<input type="text" name="startDate" id="startDate" class="layui-input" placeholder="开始时间"  ng-click="chgDate()" ng-model="key.startDate">
+					</div>
+
+					<label style="float:left;padding:6px 0px;text-align:center;">~&nbsp;</label>
+					<div class="layui-input-inline" style="width:165px;">
+						<input type="text" name="endDate" id="endDate" class="layui-input" placeholder="结束时间"  ng-click="chgDate()" ng-model="key.endDate">
+					</div>
+
+					<label class="layui-form-label">机器号</label>
+					<div class="layui-input-inline" style="width:140px;">
+						<select class="layui-input" style="width:140px;" ng-model="key.snsel" ng-change="key.sn=key.snsel" onchange='$("#sn").focus();'>  
+					        <option value="01">01</option>  
+					        <option value="02">02</option> 
+					    </select>  
+						<input class="layui-inputp" type="text" id="sn" placeholder="机器码" style="position:absolute;margin-top:-34px;margin-left:5px;width:120px;border:0pt;height:30px;" ng-model="key.sn" ng-keyup="keyEnter($event)">
+					</div>
+
+					<!-- <div class="layui-input-inline" style="width:160px;">
+						<label class="layui-form-ck">
+							<input type="checkbox" ng-model="key.isAsr">
+							<div class="layui-unselect layui-form-checkbox" ng-class="{1:'layui-form-checked'}[key.isAsr]">
+								<span>识别错误的ASR</span>
+								<i class="layui-icon"></i>
+							</div>
+						</label>
+					</div> -->
+					<label class="layui-form-label">类别</label>
+					<div class="layui-input-inline" style="width:150px;">
+						<select class="layui-input" ng-model="key.isAsr">
+							<option value="0">默认统计</option>
+							<option value="1">识别错误的ASR</option>
+							<option value="2">性别统计</option>
+						</select>
+					</div>
+
+					<button class="layui-btn layui-btn-normal" ng-click="asrNlp()">　统计　</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th style='width:170px;'><label ng-show="key2.dateType == 'w'">周</label><label ng-show="key2.dateType != 'w'">日期</label></th>
+			<th ng-show="key2.isAsr==0">识别正确</th>
+			<th ng-show="key2.isAsr==0">识别错误</th>
+			<th ng-show="key2.isAsr==0">无效内容-若琪声音</th>
+			<th ng-show="key2.isAsr==0">无效内容-环境声音</th>
+			<th ng-show="key2.isAsr==0">已标错误字数</th>
+			<th ng-show="key2.isAsr==0">已标字数总数</th>
+			<th ng-show="key2.isAsr==0">已标总数</th>
+			<th ng-show="key2.isAsr==0&&false">未标</th>
+			<th ng-show="key2.isAsr==0&&false">总数</th>
+			<th ng-show="key2.isAsr==0">合计值</th>
+			<th ng-show="key2.isDomain||key2.domain">domain</th>
+			<th ng-show="key2.isIntent||key2.intent">intent</th>
+			<th ng-show="key2.isSlot||key2.slot">slot</th>
+			<th style='width:140px;' ng-show="key2.isAsr==1">机器号</th>
+			<th style='width:140px;' ng-show="key2.isAsr==1">识别标注</th>
+			<th ng-show="key2.isAsr==1">语音识别</th>
+			<th ng-show="key2.isAsr==1">语音识别修改</th>
+			<th ng-show="key2.isAsr==1">导出</th>
+			<th ng-show="key2.isAsr==2">男（识别正确）</th>
+			<th ng-show="key2.isAsr==2">男（识别错误）</th>
+			<th ng-show="key2.isAsr==2">女（识别正确）</th>
+			<th ng-show="key2.isAsr==2">女（识别错误）</th>
+			<th ng-show="key2.isAsr==2">幼（识别正确）</th>
+			<th ng-show="key2.isAsr==2">幼（识别错误）</th>
+			<th ng-show="key2.isAsr==2">导出</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="row in list" class="ng-cloak">
+			<td>{{row.time}}</td>
+			<td ng-show="key2.isAsr==0">{{row.okAsr}}</td>
+			<td ng-show="key2.isAsr==0">{{row.chgAsr}}</td>
+			<td ng-show="key2.isAsr==0">{{row.takki}}</td>
+			<td ng-show="key2.isAsr==0">{{row.error}}</td>
+			<td ng-show="key2.isAsr==0">{{row.asrEditCnt}}</td>
+			<td ng-show="key2.isAsr==0">{{row.asrLenCnt}}</td>
+			<td ng-show="key2.isAsr==0">{{row.allData - row.noMarked}}</td>
+			<td ng-show="key2.isAsr==0&&false">{{row.noMarked}}</td>
+			<td ng-show="key2.isAsr==0&&false">{{row.allData}}</td>
+			<td ng-if="key2.isAsr==0 && $index == 0" rowspan="{{list.length}}">
+				获取的数据总数：{{allData}}<br>
+				未标的数据总数：{{noMarked}}<br><br>
+				<!-- 
+				整体识别率：{{okAsr/(marked-takkiAsr-errorAsr)*100|number:2}}%<br>
+				通用识别率：{{okChatIdont/(markChatIdont-takkiChatIdont-errorChatIdont)*100||0|number:2}}%<br>
+				专项识别率：{{(okAsr - okChatIdont)/((marked-markChatIdont) - (takkiAsr- takkiChatIdont) - (errorAsr - errorChatIdont))*100|number:2}}%<br> -->
+				整体词错率：{{zhengtierr/zhengticnt*100|number:2}}%<br>
+				通用词错率：{{tongyongerr/tongyongcnt*100||0|number:2}}%<br>
+				专项词错率：{{(zhengtierr - tongyongerr)/((zhengticnt-tongyongcnt))*100||0|number:2}}%<br>
+			</td>
+			<td ng-show="key2.isDomain||key2.domain">{{row.domain}}</td>
+			<td ng-show="key2.isIntent||key2.intent">{{row.intent}}</td>
+			<td ng-show="key2.isSlot||key2.slot">{{row.slot}}</td>
+			<td ng-show="key2.isAsr==1">{{row.sn}}</td>
+			<td ng-show="key2.isAsr==1">
+				<span ng-class="row.type==8?'Sel':'Nol'">男 &nbsp;</span>
+				<span ng-class="row.type==4?'Sel':'Nol'">女 &nbsp;</span>
+				<span ng-class="row.type==2?'Sel':'Nol'">幼</span>
+			</td>
+			<td ng-show="key2.isAsr==1">{{row.asr}}</td>
+			<td ng-show="key2.isAsr==1">{{row.asrEdit}}</td>
+			<td ng-if="key2.isAsr==1 && $index == 0" rowspan="{{list.length}}">
+				<button class="layui-btn layui-btn-normal" ng-click="asrExp()">　导出　</button>
+			</td>
+			<td ng-show="key2.isAsr==2">{{row.maleok}}</td>
+			<td ng-show="key2.isAsr==2">{{row.maleerr}}</td>
+			<td ng-show="key2.isAsr==2">{{row.femaleok}}</td>
+			<td ng-show="key2.isAsr==2">{{row.femaleerr}}</td>
+			<td ng-show="key2.isAsr==2">{{row.youngok}}</td>
+			<td ng-show="key2.isAsr==2">{{row.youngerr}}</td>
+			<td ng-if="key2.isAsr==2 && $index == 0" rowspan="{{list.length}}">
+				　标记总数：男：{{markedMale}}<br>
+				　　　　　　女：{{markedFemale}}<br>
+				　　　　　　幼：{{markedYoung}}<br>
+				整体识别率：男：{{markedMaleOk/markedMale*100||0|number:2}}%<br>
+				　　　　　　女：{{markedFemaleOk/markedFemale*100||0|number:2}}%<br>
+				　　　　　　幼：{{markedYoungOk/markedYoung*100||0|number:2}}%<br>
+				通用识别率：男：{{markedMaleOkIdonot/markedMaleIdonot*100||0|number:2}}%<br>
+				　　　　　　女：{{markedFemaleOkIdonot/markedFemaleIdonot*100||0|number:2}}%<br>
+				　　　　　　幼：{{markedYoungOkIdonot/markedYoungIdonot*100||0|number:2}}%<br>
+				专项识别率：男：{{(markedMaleOk - markedMaleOkIdonot)/(markedMaleOk - markedMaleOkIdonot +  markedMaleErr - markedMaleErrIdonot)*100||0|number:2}}%<br>
+				　　　　　　女：{{(markedFemaleOk - markedFemaleOkIdonot)/(markedFemaleOk - markedFemaleOkIdonot +  markedFemaleErr - markedFemaleErrIdonot)*100||0|number:2}}%<br>
+				　　　　　　幼：{{(markedYoungOk - markedYoungOkIdonot)/(markedYoungOk - markedYoungOkIdonot +  markedYoungErr - markedYoungErrIdonot)*100||0|number:2}}%<br>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_report.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

@@ -1,0 +1,452 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rokid.soa.mapper.manage.ReportMapper">
+  <resultMap id="asrNlp" type="com.rokid.soa.bo.report.AsrReport"></resultMap>
+  <resultMap id="asrNlpSex" type="com.rokid.soa.bo.report.AsrSexReport"></resultMap>
+  <resultMap id="active" type="com.rokid.soa.bo.report.ActiveReport"></resultMap>
+  <resultMap id="voice" type="com.rokid.soa.bo.report.VoiceReport"></resultMap>
+  <resultMap id="chat" type="com.rokid.soa.bo.report.ChatReport"></resultMap>
+  <resultMap id="chatNew" type="com.rokid.soa.bo.report.ChatNewReport"></resultMap>
+  
+  <select id="voice" resultMap="voice">
+  	  select 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H' )  as time,
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' )  as time,
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( time / 1000, '%u' )  as time,
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m' )  as time,
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y' ) as time,
+	 </if>
+	 <if test='param4 != null or (param5 != null and param5 == true)'>
+	 	sn,
+	 </if>
+		sum(CASE WHEN type = 8 THEN 1 else 0 END) as male,
+		sum(CASE WHEN type = 4 THEN 1 else 0 END) as female,
+		sum(CASE WHEN type = 2 THEN 1 else 0 END) as young,
+		sum(CASE WHEN type = 11 THEN 1 else 0 END) as env,
+		sum(CASE WHEN type = 12 THEN 1 else 0 END) as error,
+		sum(CASE WHEN type = 13 THEN 1 else 0 END) as takki,
+		sum(CASE WHEN ISNULL(type) THEN 1 else 0 END) as noMarked,
+		sum(1) as allData
+	  from rokid_voice_trigger
+   	 <where>
+   	         and time > 1480521599999
+   	 		 and ifnull(fstatus,200) = 200
+	   	 <if test='param2 != null'>
+	   	 	 and time <![CDATA[ >= ]]> #{param2} 
+	   	 </if>
+	   	 <if test='param3 != null'>	 
+	   	 	 and time <![CDATA[ <= ]]> #{param3}
+	   	 </if>
+	   	 <if test='param4 != null'>
+		 	 and sn like CONCAT('',#{param4},'%')
+		 </if>
+	</where>
+	 GROUP BY 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H' ) 
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' ) 
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( time / 1000, '%u' ) 
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m' ) 
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y' ) 
+	 </if>	
+	 <if test='param5 != null and param5 == true'>
+	 	,sn
+	 </if> 	
+	 order by time desc
+	 <if test='param4 != null or (param5 != null and param5 == true)'>
+	 	, sn
+	 </if>
+  </select>
+
+  <select id="asrNlp" resultMap="asrNlp">
+  	  select 
+	 <if test='param8 or param1 == "h"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H:%i:%s' )  as time,
+	 </if>
+	 <if test='!param8 and param1 == "d"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' )  as time,
+	 </if>
+	 <if test='!param8 and param1 == "w"'>
+	 	FROM_UNIXTIME( time / 1000, '%u' )  as time,
+	 </if>
+	 <if test='!param8 and param1 == "m"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m' )  as time,
+	 </if>
+	 <if test='!param8 and param1 == "y"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y' ) as time,
+	 </if>
+	 <if test='param8 != null and param8 == true'>
+	 	asr,asr_edit as asrEdit,type,
+	 </if>
+	 <if test='param8 != null or param4 != null or (param9 != null and param9 == true)'>
+	 	sn,
+	 </if>
+	 <if test='param5 != null or (param10 != null and param10 == true)'>
+	 	domain,
+	 </if>
+	 <if test='param6 != null or (param11 != null and param11 == true)'>
+	 	intent,
+	 </if>
+	 <if test='param7 != null or (param12 != null and param12 == true)'>
+	 	slot,
+	 </if>
+	 <if test='param8 == null or param8 == false'>
+		sum(CASE WHEN type = 8 THEN 1 else 0 END) as male,
+		sum(CASE WHEN type = 4 THEN 1 else 0 END) as female,
+		sum(CASE WHEN type = 2 THEN 1 else 0 END) as young,
+		sum(CASE WHEN asr_type = 1 THEN 1 else 0 END) as okAsr,
+		sum(CASE WHEN asr_type = 2 THEN 1 else 0 END) as chgAsr,
+		sum(CASE WHEN asr_type = 3 THEN 1 else 0 END) as takki,
+		sum(CASE WHEN asr_type = 4 THEN 1 else 0 END) as error,
+		sum(CASE WHEN ISNULL(asr_type) THEN 1 else 0 END) as noMarked,	
+		sum(1) as allData,
+		
+		<!-- 
+		sum(CASE WHEN asr_type = 1 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) as okChatIdont,
+		sum(CASE WHEN asr_type = 3 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) as takkiChatIdont,
+		sum(CASE WHEN asr_type = 4 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) as errorChatIdont,
+		sum(CASE WHEN asr_type and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) as markChatIdont,
+		sum(asr_edit_cnt) as asrEditCnt,
+		sum(CASE WHEN asr_type = 1 or asr_type = 2 THEN CHAR_LENGTH(asr) else 0 END) as asrLenCnt,
+		 -->
+		
+		<!-- 整体 -->
+		sum(asr_edit_cnt) as asrEditCnt,
+		sum(CASE WHEN asr_type = 1 THEN CHAR_LENGTH(asr) WHEN asr_type = 2 THEN CHAR_LENGTH(asr_edit) else 0 END) as asrLenCnt,
+		<!-- 通用 命中 chat\idontknow-->
+		sum(CASE WHEN domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow' THEN asr_edit_cnt else 0 END) as tyEditCnt,
+		sum(
+			CASE WHEN asr_type = 1 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 
+				CHAR_LENGTH(asr) 
+			WHEN asr_type = 2 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow')  THEN 
+				CHAR_LENGTH(asr_edit) 
+			else 0 END) as tyLenCnt,
+	</if>
+		'1' as test
+	  from rokid_asr_nlp
+   	 <where>
+   	         and time > 1480521599999
+   	 		 and ifnull(fstatus,200) = 200
+	   	 <if test='param2 != null'>
+	   	 	 and time <![CDATA[ >= ]]> #{param2} 
+	   	 </if>
+	   	 <if test='param3 != null'>	 
+	   	 	 and time <![CDATA[ <= ]]> #{param3}
+	   	 </if>
+	   	 <if test='param4 != null'>
+		  	 and sn like CONCAT('',#{param4},'%')
+		 </if>
+		 <if test='param5 != null'>
+		 	 and domain = #{param5}
+		 </if>
+		 <if test='param6 != null'>
+		 	 and intent = #{param6}
+		 </if>
+		 <if test='param7 != null'>
+		 	 and slot = #{param7}
+		 </if>
+		 <if test='param8 != null and param8 == true'>
+		 	 and asr_type = 2
+		 </if>
+	</where>
+	 GROUP BY 
+	 <if test='param8 or param1 == "h"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H:%i:%s' ) 
+	 </if>
+	 <if test='!param8 and param1 == "d"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' ) 
+	 </if>
+	 <if test='!param8 and param1 == "w"'>
+	 	FROM_UNIXTIME( time / 1000, '%u' ) 
+	 </if>
+	 <if test='!param8 and param1 == "m"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m' ) 
+	 </if>
+	 <if test='!param8 and param1 == "y"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y' ) 
+	 </if>
+	 <if test='param8 != null and param8 == true'>
+	 	,asr,asr_edit
+	 </if>
+	 <if test='param9 != null and param9 == true'>
+	 	,sn
+	 </if>
+	 <if test='param10 != null and param10 == true'>
+	 	,domain
+	 </if>
+	 <if test='param11 != null and param11 == true'>
+	 	,intent
+	 </if>
+	 <if test='param12 != null and param12 == true'>
+	 	,slot
+	 </if>
+	order by time desc
+	<if test='param4 != null or (param9 != null and param9 == true)'>
+		, sn
+	</if>
+	<if test='param5 != null or (param10 != null and param10 == true)'>
+		, domain
+	</if>
+	<if test='param6 != null or (param11 != null and param11 == true)'>
+		, intent
+	</if>
+	<if test='param7 != null or (param12 != null and param12 == true)'>
+		, slot
+	</if>
+  </select>
+  
+  <select id="asrNlpSex" resultMap="asrNlpSex">
+  	SELECT 
+		<if test='param1 == "h"'>
+		 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H:%i:%s' ) 
+		</if>
+		<if test='param1 == "d"'>
+		 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' ) 
+		</if>
+		<if test='param1 == "w"'>
+		 	FROM_UNIXTIME( time / 1000, '%u' ) 
+		</if>
+		<if test='param1 == "m"'>
+		 	FROM_UNIXTIME( time / 1000, '%Y-%m' ) 
+		</if>
+		<if test='param1 == "y"'>
+		 	FROM_UNIXTIME( time / 1000, '%Y' ) 
+		</if> as time,
+		SUM(CASE WHEN type = 8 and asr_type = 1 THEN 1 else 0 END) maleok,
+		SUM(CASE WHEN type = 8 and asr_type = 2 THEN 1 else 0 END) maleerr,
+		SUM(CASE WHEN type = 4 and asr_type = 1 THEN 1 else 0 END) femaleok,
+		SUM(CASE WHEN type = 4 and asr_type = 2 THEN 1 else 0 END) femaleerr,
+		SUM(CASE WHEN type = 2 and asr_type = 1 THEN 1 else 0 END) youngok,
+		SUM(CASE WHEN type = 2 and asr_type = 2 THEN 1 else 0 END) youngerr,
+		SUM(CASE WHEN type = 8 and asr_type = 1 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) maleokidnot,
+		SUM(CASE WHEN type = 8 and asr_type = 2 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) maleerridnot,
+		SUM(CASE WHEN type = 4 and asr_type = 1 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) femaleokidnot,
+		SUM(CASE WHEN type = 4 and asr_type = 2 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) femaleerridnot,
+		SUM(CASE WHEN type = 2 and asr_type = 1 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) youngokidnot,
+		SUM(CASE WHEN type = 2 and asr_type = 2 and (domain = 'com.rokid.system.chat' or domain = 'com.rokid.system.idontknow') THEN 1 else 0 END) youngerridnot
+	from rokid_asr_nlp
+	WHERE time > 1480521599999
+	  and ifnull(fstatus,200) = 200
+	 <if test='param2 != null'>
+   	 	 and time <![CDATA[ >= ]]> #{param2} 
+   	 </if>
+   	 <if test='param3 != null'>	 
+   	 	 and time <![CDATA[ <= ]]> #{param3}
+   	 </if>
+   	 <if test='param4 != null'>
+	  	 and sn like CONCAT('',#{param4},'%')
+	 </if>
+	GROUP BY
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H:%i:%s' ) 
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d' ) 
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( time / 1000, '%u' ) 
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m' ) 
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( time / 1000, '%Y' ) 
+	 </if>
+	ORDER BY time DESC
+  </select>
+  
+  <select id="active" resultMap="active">
+		SELECT a.ymd, a.time, SUM(a.voicecnt) voicecnt, SUM(a.asrcnt) asrcnt FROM
+		(
+			SELECT 
+				FROM_UNIXTIME(time/1000,'%Y-%m-%d ') ymd, 
+				CASE WHEN(FROM_UNIXTIME(time/1000,'%H')%2=1) THEN FROM_UNIXTIME((time - 1000*3600)/1000,'%H') ELSE FROM_UNIXTIME(time/1000,'%H') END time,
+				sum(CASE WHEN type = 8 or type = 4 or type = 2 THEN 1 else 0 END) as voicecnt,
+				0 as asrcnt
+			 from rokid_voice_trigger
+			WHERE time > 1480521599999
+				and ifnull(fstatus,200) = 200
+				 <if test='param2 != null'>
+			   	 	 and time <![CDATA[ >= ]]> #{param2} 
+			   	 </if>
+			   	 <if test='param3 != null'>	 
+			   	 	 and time <![CDATA[ <= ]]> #{param3}
+			   	 </if>
+			   	 <if test='param4 != null'>
+				  	 and sn like CONCAT('',#{param4},'%')
+				 </if>
+			GROUP BY
+				FROM_UNIXTIME( time / 1000, '%Y-%m-%d' ),
+				CASE WHEN(FROM_UNIXTIME(time/1000,'%H')%2=1) THEN FROM_UNIXTIME((time - 1000*3600)/1000,'%H') ELSE FROM_UNIXTIME(time/1000,'%H') END
+			UNION(
+				SELECT 
+					FROM_UNIXTIME(time/1000,'%Y-%m-%d ') as ymd,
+					CASE WHEN(FROM_UNIXTIME(time/1000,'%H')%2=1) THEN FROM_UNIXTIME((time - 1000*3600)/1000,'%H') ELSE FROM_UNIXTIME(time/1000,'%H') END time,
+					0 as voicecnt,
+					sum(CASE WHEN asr_type = 1 or asr_type = 2 THEN 1 else 0 END) as asrcnt
+				 from rokid_asr_nlp
+				WHERE time > 1480521599999
+					and ifnull(fstatus,200) = 200
+					 <if test='param2 != null'>
+				   	 	 and time <![CDATA[ >= ]]> #{param2} 
+				   	 </if>
+				   	 <if test='param3 != null'>	 
+				   	 	 and time <![CDATA[ <= ]]> #{param3}
+				   	 </if>
+				   	 <if test='param4 != null'>
+					  	 and sn like CONCAT('',#{param4},'%')
+					 </if>
+				GROUP BY
+					FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H' ) 
+			)
+		) a
+		GROUP BY a.ymd, a.time
+		ORDER BY a.ymd desc, a.time
+  </select>
+  
+  <select id="chat" resultMap="chat">
+  	  select 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d %H' )  as time,
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d' )  as time,
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%u' )  as time,
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m' )  as time,
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y' ) as time,
+	 </if>
+	 <if test='param4 != null or (param5 != null and param5 == true)'>
+	 	assign_id as assignId,
+	 </if>
+	 <if test='param6 != null or (param7 != null and param7 == true)'>
+	 	sn,
+	 </if>
+		sum(CASE WHEN ISNULL(filter_id) THEN 0 else 1 END) as marked,
+		sum(CASE WHEN ISNULL(filter_id) THEN 1 else 0 END) as noMarked,
+		sum(1) as allData
+	  from rokid_question
+   	 <where>
+	   	 <if test='param2 != null'>
+	   	 	 and upd_time <![CDATA[ >= ]]> #{param2} 
+	   	 </if>
+	   	 <if test='param3 != null'>	 
+	   	 	 and upd_time <![CDATA[ <= ]]> #{param3}
+	   	 </if>
+	   	 <if test='param4 != null'>
+		 	and assign_id = #{param4}
+		 </if>
+		 <if test='param6 != null'>
+		 	and sn = #{param6}
+		 </if>
+	</where>
+	 GROUP BY 
+	 <if test='param1 == "h"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d %H' ) 
+	 </if>
+	 <if test='param1 == "d"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m-%d' ) 
+	 </if>
+	 <if test='param1 == "w"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%u' ) 
+	 </if>
+	 <if test='param1 == "m"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y-%m' ) 
+	 </if>
+	 <if test='param1 == "y"'>
+	 	FROM_UNIXTIME( upd_time / 1000, '%Y' ) 
+	 </if>	
+	 <if test='param5 != null and param5 == true'>
+	 	,assign_id
+	 </if> 
+	 <if test='param7 != null and param7 == true'>
+	 	,sn
+	 </if> 	
+	 order by upd_time
+	 <if test='param4 != null or (param5 != null and param5 == true)'>
+	 	, assign_id
+	 </if>
+	 <if test='param6 != null or (param7 != null and param7 == true)'>
+	 	, sn
+	 </if>
+  </select>  
+  
+  <select id="chatNewCount" resultType="int">
+  	  select 
+  	    count(id)
+	  from rokid_question
+	<where>
+		<if test='param1 != null'>
+		 	and time <![CDATA[ >= ]]> #{param1}
+		</if>
+		<if test='param2 != null'>
+		 	and time <![CDATA[ <= ]]> #{param2}
+		</if>
+		<if test='param3 != null'>
+			and assign_id = #{param3}
+		</if>
+		<if test='param4 != null'>
+			and sn = #{param4}
+		</if>
+	</where>
+  </select>
+  
+  <select id="chatNew" resultMap="chatNew">
+  	  select 
+  	    id, topic,	 	
+	 <if test='param3 != null'>
+	 	assign_id as assignId,
+	 </if>
+	 <if test='param4 != null'>
+	 	sn,
+	 </if>
+	 	FROM_UNIXTIME( time / 1000, '%Y-%m-%d %H:%i:%s' )  as time
+	  from rokid_question
+	<where>
+		<if test='param1 != null'>
+		 	and time <![CDATA[ >= ]]> #{param1}
+		</if>
+		<if test='param2 != null'>
+		 	and time <![CDATA[ <= ]]> #{param2}
+		</if>
+		<if test='param3 != null'>
+			and assign_id = #{param3}
+		</if>
+		<if test='param4 != null'>
+			and sn = #{param4}
+		</if>
+	</where>
+	 order by time desc
+	 <if test="param5 != null and param6 != null">
+	 	limit #{param5},#{param6}
+  	 </if>
+  </select>
+  
+  <delete id="chatNewDel">
+  	delete  
+	  from rokid_question
+   	 where id in (#{param1})
+  </delete>
+</mapper>

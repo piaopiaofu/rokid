@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.biaozhu.ChatMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.Chat" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="score" property="score" jdbcType="REAL" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="crt_time" property="crtTime" jdbcType="BIGINT" />
+    <result column="crt_user" property="crtUser" jdbcType="VARCHAR" />
+    <result column="upd_time" property="updTime" jdbcType="BIGINT" />
+    <result column="upd_user" property="updUser" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, score, name, crt_time, crt_user, upd_time, upd_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_chat
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from rokid_chat
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" useGeneratedKeys="true" keyProperty="id" parameterType="com.rokid.soa.bo.biaozhu.Chat" >
+    insert into rokid_chat (id, score, name, 
+      crt_time, crt_user, upd_time, upd_user)
+    values (#{id,jdbcType=VARCHAR}, #{score,jdbcType=REAL}, #{name,jdbcType=VARCHAR}, 
+      #{crtTime,jdbcType=BIGINT}, #{crtUser,jdbcType=VARCHAR},#{updTime,jdbcType=BIGINT}, #{updUser,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.Chat" >
+    insert into rokid_chat
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="score != null" >
+        score,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="crtTime != null" >
+        crt_time,
+      </if>
+      <if test="crtUser != null" >
+        crt_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=REAL},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updUser != null" >
+        #{updUser,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.Chat" >
+    update rokid_chat
+    <set >
+      <if test="score != null" >
+        score = #{score,jdbcType=REAL},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        crt_time = #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        crt_user = #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updTime != null" >
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updUser != null" >
+        upd_user = #{updUser,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.Chat" >
+    update rokid_chat
+    set score = #{score,jdbcType=REAL},
+      name = #{name,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=BIGINT},
+      crt_user = #{crtUser,jdbcType=VARCHAR},
+      upd_time = #{updTime,jdbcType=BIGINT},
+      upd_user = #{updUser,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 话题是否已存在-->
+  <select id="nameCount" resultType="int">
+  	select 
+    	count(id)
+    from rokid_chat
+    where name = #{param1}
+    <if test="param2 != null">
+    	and id != #{param2}
+    </if>
+  </select>
+  
+  <!-- 查询一栏 -->
+  <select id="listCount" resultType="int">
+  	select 
+    	count(id)
+     from rokid_chat
+   <where>
+    <if test="param1 != null">
+    	and name like CONCAT('%',#{param1},'%')
+    </if> 
+    <if test="param2 != null">
+    	and id in(
+    	  select chat_id 
+    	    from rokid_question
+    	   where topic like CONCAT('%',#{param2},'%')
+    	) 
+    </if> 
+    <if test="param3 != null">
+    	and id in(
+    	  select chat_id 
+    	    from rokid_answer
+    	   where name like CONCAT('%',#{param3},'%')
+    	) 
+    </if>  
+   </where>
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select 
+    	<include refid="Base_Column_List" />
+     from rokid_chat
+   <where>
+    <if test="param1 != null">
+    	and name like CONCAT('%',#{param1},'%')
+    </if> 
+    <if test="param2 != null">
+    	and id in(
+    	  select chat_id 
+    	    from rokid_question
+    	   where topic like CONCAT('%',#{param2},'%')
+    	) 
+    </if> 
+    <if test="param3 != null">
+    	and id in(
+    	  select chat_id 
+    	    from rokid_answer
+    	   where name like CONCAT('%',#{param3},'%')
+    	) 
+    </if>
+   </where> 
+   order by id desc
+   <if test="param4 != null and param5 != null">
+	limit #{param4},#{param5}
+   </if>
+  </select>
+</mapper>

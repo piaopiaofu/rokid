@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/common.css">
+</head>
+<body ng-controller="login">
+
+<div class="login-layout">
+	<h1 class="logo-txt">ROKID 标注平台</h1>
+	<div class="layui-form layui-form-pane">
+	<form name="loginForm">
+		<div class="layui-form-item">
+			<label class="layui-form-label">用户名</label>
+			<div class="layui-input-inline">
+				<input type="text" ng-model="login.userName" ng-minlength=3 maxlength="20" required class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<label class="layui-form-label">密码</label>
+			<div class="layui-input-inline">
+				<input type="password" ng-model="login.password" required maxlength="20"  class="layui-input">
+			</div>
+		</div>
+		<div class="layui-form-item">
+			<center>
+				<button class="layui-btn" ng-click="post()" ng-disabled="">立即登录</button>
+			</center>
+		</div>
+	</form>
+	</div>
+</div>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/login.js"></script>
+</body>
+</html>

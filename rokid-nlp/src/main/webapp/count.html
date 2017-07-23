@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+</head>
+<body ng-controller="rokid_nlp">
+<div class="header" style="margin-bottom:15px;margin-top:0px;float:left;width:100%;z-index:10000;">
+	<div class="top" style="background:#393D49;color:white;width:100%;">
+		<!--导航-->
+		<h1 class="logo" style="float:left">ROKID NLP标注  </h1> 
+		<div class="tool" style="float:right;">
+			<div class="item user ng-binding">用户名:<span id=user></span></div>
+			<div class="item">
+				<button class="layui-btn layui-btn-small layui-btn-danger" ng-click="logout();">退出</button>
+			</div>
+			<div class="layui-clear"></div>
+		</div>
+	</div>
+</div><br>
+
+<div class="mleft" style="padding-left:10px;">
+	<div class="menu" onclick="location.href='./main.html'">
+		NLP标注
+	</div>
+	<div class="menu" onclick="location.href='./error.html'">
+		标注错误<br>
+		NLP查询
+	</div>
+	<div class="menu" onclick="location.href='./success.html'">
+		处理完成<br>
+		NLP查询
+	</div>
+	<div class="menu box-shadow-1" onclick="location.href='./count.html'">
+		统计界面
+	</div>
+	<div ng-show="isadm" class="menu" onclick="location.href='./user.html'">
+		用户管理
+	</div>
+	<div ng-show="isadm" class="menu" onclick="location.href='./config.html'">
+		配置管理
+	</div>
+</div>
+
+<!--语音标注-->
+<div class="mright son-page">
+	<table class="table table-bordered">
+		<thead>
+			<tr class="key">
+				<th style="text-align:left;" class="key">
+					<span style="float:left;margin-top:3px;"><input class="layui-input-top" id='start' placeholder="开始时间" ng-click="chgDate('start')" type="text" style='width:82px;' ng-model="key.start" ng-keyup="keyEnter($event)"></span>
+					<span style="float:left;margin-top:3px;">&nbsp;~&nbsp;</span>
+					<span style="float:left;margin-top:3px;"><input class="layui-input-top" id='end' placeholder="结束时间" ng-click="chgDate('end')" type="text" style='width:82px;' ng-model="key.end" ng-keyup="keyEnter($event)"></span>
+					　
+					<select name="selectObj" ng-model="key.domain" class="layui-input-top ng-pristine ng-valid ng-touched" style="width:240px;" placeholder="domain">
+						<option></option>
+						<option ng-repeat="opt in domainList" value="{{opt.domain}}">{{opt.domain}}</option>
+						<option ng-repeat="opt in groupList" value="groupId:{{opt.id}}">{{opt.name}}</option>
+					</select>
+					
+					<span style="display:none">{{key.type=4}}</span>
+					<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="search();">
+					　查 询　
+					</a>
+				</th>
+			</tr>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th style='width:170px;'><label ng-show="key2.dateType == 'w'">周</label><label ng-show="key2.dateType != 'w'">日期</label></th>
+			<th style="width:180px;">模块</th>
+			<th style="width:90px;">总句数</th>
+			<th style="width:90px;">错误句数</th>
+			<th style="width:90px;">正确句数</th>
+			<th style="width:90px;">错误率</th>
+			<th style="text-align:left;">　
+				<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="domain.show();">
+				　domain分组　
+				</a>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="row in list" class="ng-cloak">
+			<td>{{row.time}}</td>
+			<td>{{row.domain}}</td>
+			<td>{{row.errorCnt + row.okCnt}}</td>
+			<td>{{row.errorCnt}}</td>
+			<td>{{row.okCnt}}</td>
+			<td>{{row.errorCnt/(row.errorCnt + row.okCnt)*100||0|number:2}}%</td>
+			<td></td>
+		</tr>
+	</tbody>
+</table>
+	<span ng-show="list.length==0">
+		
+	</span>
+	<!--分页-->
+	<div id="page-wp" class="page-wp">
+		<div class="layui-box layui-laypage layui-laypage-default">
+			<a href="javascript:;" class="layui-laypage-prev" ng-click="page.go('prev')">上一页</a>			
+			<a href="#" ng-repeat="row in page.pagination" ng-class="{'on':page.current==row.page}" ng-click="page.go(row.page)">{{row.text}}</a>			
+			<a href="javascript:;" class="layui-laypage-next" ng-click="page.go('next')">下一页</a>
+			<span class="layui-laypage-total">　<input type="number" ng-model="page.current" class="layui-laypage-skip"><button type="button" class="layui-laypage-btn" ng-click="page.go(page.current)">确定</button></span>
+		</div>
+	</div>
+	<!--分页-end-->
+</div>
+
+<!--domain分组-->
+<div class="boxmsg ng-cloak" ng-show="domainshow">
+<div class="bg"></div>
+	<div class="wp layui-form" style="padding-top:0px;">
+	<form name="reg">
+	<div>
+		<div class="blk" style="background:#D6D8DE;float:left;width:100%;padding:7px 0px;margin-bottom:15px;">
+			<h3 class="title" style="float:left;padding-left:8px;">domain分组</h3>
+			<span class="layui-icon" ng-click="domainshow=false" style="font-size:20px;float:right;cursor:hand;padding-right:5px;" title="关闭">&#x1006;</span>
+		</div>
+		<div class="layui-form-item" style="float:left;text-align:left;">
+			<div style='float:left;padding-left:15px;width:150px;height:300px;border-right:2px solid #cccccc;overflow-y:scroll;'>
+				&nbsp;<a class="layui-btn layui-btn-small layui-btn-normal" style="margin-top:10px;width:123px;" ng-click="domain.list(null);">查看所有</a>
+				<hr style="height:1px;border:none;border-top:0px dashed #ffffff;margin:7px 0px;" >
+				<span ng-repeat="row in groupTempList">
+					<input class="layui-input-top" type="text" style='width:70px;' ng-model="row.name" ng-change="domain.groupEdit(row);">
+					<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="domain.list(row);">查看</a>
+					<hr style="height:0px;border:none;border-top:1px dashed #ffffff;margin:2px 0px;" >
+				</span>
+				<hr style="height:1px;border:none;border-top:0px dashed #ffffff;margin:7px 0px;" >
+				&nbsp;<a class="layui-btn layui-btn-small layui-btn-normal" ng-click="domain.groupAdd();" style="margin-top:10px;width:124px;">添加组 </a>
+			</div>			
+			<div style='float:right;padding-left:30px;width:400px;height:300px;overflow-y:scroll;padding-top:2px;'>
+				<span ng-repeat="row in domainGroupList" >
+					<div style="float:left;">
+						<div style="float:left;width:280px;text-overflow:ellipsis;display:block;overflow:hidden;white-space: nowrap;">
+							{{row.domain}}
+						</div>
+						<div style="float:left;">
+							<select ng-model="row.groupId" style='width:100px;' class="layui-input-top ng-pristine ng-valid ng-touched" ng-change="domain.domainEdit(row, this.name);">
+								<option selected value=""></option>
+								<option ng-repeat="opt in groupTempList" ng-selected="row.groupId==opt.id" ng-show="opt!=null&&opt.name!=null" value="{{opt.id==null?opt.name:opt.id}}">{{opt.name}}</option>
+							</select>
+						</div>
+						<br>
+					</div>
+				</span>
+			</div>
+		</div>
+	</div>
+
+	<div class="button-wp">
+		<button class="layui-btn layui-btn-normal layui-btn-danger" ng-show="!userInfo.id" ng-click="domain.save()"> 保 存 </button>
+	</div>
+	</div>
+	</form>
+</div>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/rokid_main.js"></script>
+<link type="text/css" href="css/select2.min.css" rel="stylesheet" />
+<script type="text/javascript" src="js/select2.full.js"></script>
+</body>
+</html>

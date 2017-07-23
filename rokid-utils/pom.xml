@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>parent-all</artifactId>
+        <groupId>com.parent-all</groupId>
+        <version>1.0.0</version>
+    </parent>
+
+    <groupId>com.rokid.soa</groupId>
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>rokid-utils</artifactId>
+    <packaging>jar</packaging>
+    <name>rokid-utils</name>
+    <version>1.0.1</version>
+
+    <properties>
+        <skip_maven_deploy>false</skip_maven_deploy>
+        <spring-test-version>4.0.6.RELEASE</spring-test-version>
+    </properties>
+    
+    <dependencies>
+		<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring-test-version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+            <version>${spring-test-version}</version>
+        </dependency>
+		<dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-beanutils</groupId>
+            <artifactId>commons-beanutils</artifactId>
+            <version>1.7.0</version>
+        </dependency>
+        <dependency>
+		  <groupId>commons-net</groupId>
+		  <artifactId>commons-net</artifactId>
+		  <version>1.4.1</version>
+		</dependency>
+    </dependencies>
+</project>

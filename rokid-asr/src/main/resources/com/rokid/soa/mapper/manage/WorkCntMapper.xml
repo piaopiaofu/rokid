@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.rokid.soa.mapper.manage.WorkCntMapper">
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.WorkCnt">
+    <id column="time" jdbcType="VARCHAR" property="time" />
+    <id column="type" jdbcType="INTEGER" property="type" />
+    <id column="work_date" jdbcType="VARCHAR" property="workDate" />
+    <result column="cnt" jdbcType="INTEGER" property="cnt" />
+    <result column="all_cnt" jdbcType="INTEGER" property="allCnt" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.rokid.soa.bo.manage.WorkCnt">
+    <result column="end_time" jdbcType="LONGVARCHAR" property="endTime" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    time, type, work_date, cnt, all_cnt
+  </sql>
+  <sql id="Blob_Column_List">
+    end_time
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.rokid.soa.bo.manage.WorkCntKey" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from rokid_work_cnt
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.rokid.soa.bo.manage.WorkCntKey">
+    delete from rokid_work_cnt
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    insert into rokid_work_cnt (time, type, work_date, 
+      cnt, all_cnt, end_time
+      )
+    values (#{time,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{workDate,jdbcType=VARCHAR}, 
+      #{cnt,jdbcType=INTEGER}, #{allCnt,jdbcType=INTEGER}, #{endTime,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    insert into rokid_work_cnt
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="time != null">
+        time,
+      </if>
+      <if test="type != null">
+        type,
+      </if>
+      <if test="workDate != null">
+        work_date,
+      </if>
+      <if test="cnt != null">
+        cnt,
+      </if>
+      <if test="allCnt != null">
+        all_cnt,
+      </if>
+      <if test="endTime != null">
+        end_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="time != null">
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null">
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="workDate != null">
+        #{workDate,jdbcType=VARCHAR},
+      </if>
+      <if test="cnt != null">
+        #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="allCnt != null">
+        #{allCnt,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        #{endTime,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    update rokid_work_cnt
+    <set>
+      <if test="cnt != null">
+        cnt = #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="allCnt != null">
+        all_cnt = #{allCnt,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    update rokid_work_cnt
+    set cnt = #{cnt,jdbcType=INTEGER},
+      all_cnt = #{allCnt,jdbcType=INTEGER},
+      end_time = #{endTime,jdbcType=LONGVARCHAR}
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    update rokid_work_cnt
+    set cnt = #{cnt,jdbcType=INTEGER},
+      all_cnt = #{allCnt,jdbcType=INTEGER}
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateByPrimaryKeySelective2" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    update rokid_work_cnt
+    <set>
+      <if test="cnt != null">
+        cnt = cnt + #{cnt,jdbcType=INTEGER},
+      </if>
+      <if test="allCnt != null">
+        all_cnt = all_cnt + #{allCnt,jdbcType=INTEGER},
+      </if>
+      <if test="endTime != null">
+        end_time = #{endTime,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where time = #{time,jdbcType=VARCHAR}
+      and type = #{type,jdbcType=INTEGER}
+      and work_date = #{workDate,jdbcType=VARCHAR}
+  </update>
+  
+  <update id="updateEndTimeNull" parameterType="com.rokid.soa.bo.manage.WorkCnt">
+    update rokid_work_cnt
+       set end_time = null
+    where time = #{time,jdbcType=VARCHAR}
+    <if test="type != null">
+      and type = #{type,jdbcType=INTEGER}
+    </if>
+  </update>
+</mapper>

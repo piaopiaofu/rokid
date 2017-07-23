@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+<link rel="stylesheet" href="css/modules/laydate/laydate.css">
+<script type="text/javascript" src="js/laydate.js"></script>
+</head>
+<body ng-controller="rokid_tongji">
+<br><span ng-show="type=4;"></span>
+<table class="table table-bordered">
+	<thead><tr><th colspan="1">活跃度统计</th></tr><thead>
+	<tbody class="layui-form">
+		<tr>
+			<td>
+				<div class="layui-form-item">
+					<label class="layui-form-label">开始时间</label>
+					<div class="layui-input-inline" style="width:115px;">
+						<input type="text" name="startDate" id="startDate" class="layui-input" placeholder="开始时间"  ng-click="chgDate()" ng-model="key.startDate">
+					</div>
+
+					<label class="layui-form-label">机器号</label>
+					<div class="layui-input-inline" style="width:140px;">
+						<select class="layui-input" style="width:140px;" ng-model="key.snsel" ng-change="key.sn=key.snsel" onchange='$("#sn").focus();'>  
+					        <option value="01">01</option>  
+					        <option value="02">02</option> 
+					    </select>  
+						<input class="layui-inputp" type="text" id="sn" placeholder="机器码" style="position:absolute;margin-top:-34px;margin-left:5px;width:120px;border:0pt;height:30px;" ng-model="key.sn" ng-keyup="keyEnter($event)">
+					</div>
+
+					<button class="layui-btn layui-btn-normal" ng-click="active()">　统计　</button>
+				</div>
+			</td>
+		</tr>
+	</tbody>
+</table>
+
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th style="width:180px;">时间段</th>
+			<th style="width:120px;">激活语音</th>
+			<th style="width:120px;">语音识别</th>
+			<th>&nbsp;</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr ng-repeat="row in list" class="ng-cloak">
+			<td>{{row.timestart}} ~&nbsp;{{row.timeend}}</td>
+			<td>{{row.voicecnt}}</td>
+			<td>{{row.asrcnt}}</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_report.js"></script>
+<script type="text/javascript">
+
+</script>
+</body>
+</html>

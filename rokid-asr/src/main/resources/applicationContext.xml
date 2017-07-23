@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="
+           http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/task    http://www.springframework.org/schema/task/spring-task-3.0.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd">
+
+    <!-- 引入mybatis及shiro的配置文件 -->
+    <import resource="classpath:rokid-beans.xml" />
+
+	<!-- 定时处理 -->
+    <task:scheduled-tasks>
+    	<!-- cron表达式：*(秒0-59) *(分钟0-59) *(小时0-23) *(日期1-31) *(月份1-12或是JAN-DEC) *(星期1-7或是SUN-SAT) -->
+        <!-- 首次导入的数据
+        <task:scheduled ref="syncService" method="SyncVoice" cron="0 0/50 * * * ?" />        
+        <task:scheduled ref="syncService" method="SyncQuestion" cron="0 0/1 * * * ?" />       
+        <task:scheduled ref="syncService" method="SyncChat" cron="0 0/30 * * * ?" />
+        <task:scheduled ref="syncService" method="SyncAnswer" cron="0 0/1 * * * ?" /> -->
+        
+        <!-- 每8分钟执行一次,导入数据语音标注 -->
+        <task:scheduled ref="syncService" method="SyncAsr" cron="0 0/8 * * * ?" />
+        
+        <!-- 每天凌晨2:00 定时删除已分配但未标注的数据-->
+        <task:scheduled ref="syncService" method="DelWorkRec" cron="0 0 2 * * *" />
+        
+        <!-- 每天凌晨3:00 定时删除黑名单数据数据-->
+        <task:scheduled ref="syncService" method="DelFilterRec" cron="0 0 3 * * *" />
+        
+    </task:scheduled-tasks>
+</beans>

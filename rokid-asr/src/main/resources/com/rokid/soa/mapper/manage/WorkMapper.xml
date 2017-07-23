@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.WorkMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.Work" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="time" property="time" jdbcType="VARCHAR" />
+    <result column="start_time" property="startTime" jdbcType="BIGINT" />
+    <result column="end_time" property="endTime" jdbcType="BIGINT" />
+    <result column="users" property="users" jdbcType="VARCHAR" />
+    <result column="voice" property="voice" jdbcType="BOOLEAN" />
+    <result column="asr" property="asr" jdbcType="BOOLEAN" />
+    <result column="chat" property="chat" jdbcType="BOOLEAN" />
+    <result column="voice_end" property="voiceEnd" jdbcType="BIGINT" />
+    <result column="asr_end" property="asrEnd" jdbcType="BIGINT" />
+    <result column="chat_end" property="chatEnd" jdbcType="BIGINT" />
+    <result column="crt_time" property="crtTime" jdbcType="BIGINT" />
+    <result column="crt_user" property="crtUser" jdbcType="VARCHAR" />
+    <result column="memo" property="memo" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, time, start_time, end_time, voice, asr, chat, users, crt_time, crt_user, memo, voice_end, asr_end, chat_end
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_work
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_work
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.Work" >
+    insert into rokid_work (id, time, start_time, end_time, users, 
+      crt_time, crt_user, memo,voice, asr, chat, voice_end, asr_end, chat_end
+      )
+    values (#{id,jdbcType=VARCHAR}, #{time,jdbcType=VARCHAR}, #{startTime,jdbcType=BIGINT}, #{endTime,jdbcType=BIGINT}, #{users,jdbcType=VARCHAR}, 
+      #{crtTime,jdbcType=BIGINT}, #{crtUser,jdbcType=VARCHAR}, #{memo,jdbcType=VARCHAR},
+      #{voice,jdbcType=BOOLEAN},#{asr,jdbcType=BOOLEAN},#{chat,jdbcType=BOOLEAN},
+      #{voiceEnd,jdbcType=BIGINT},#{asrEnd,jdbcType=BIGINT},#{chatEnd,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.Work" >
+    insert into rokid_work
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="voice != null" >
+        voice,
+      </if>
+      <if test="asr != null" >
+        asr,
+      </if>
+      <if test="chat != null" >
+        chat,
+      </if>
+      <if test="voiceEnd != null" >
+        voice_end,
+      </if>
+      <if test="asrEnd != null" >
+        asr_end,
+      </if>
+      <if test="chatEnd != null" >
+        chat_end,
+      </if>
+      <if test="users != null" >
+        users,
+      </if>
+      <if test="crtTime != null" >
+        crt_time,
+      </if>
+      <if test="crtUser != null" >
+        crt_user,
+      </if>
+      <if test="memo != null" >
+        memo,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="voice != null" >
+        #{voice,jdbcType=BOOLEAN},
+      </if>
+      <if test="asr != null" >
+        #{asr,jdbcType=BOOLEAN},
+      </if>
+      <if test="chat != null" >
+        #{chat,jdbcType=BOOLEAN},
+      </if>
+      <if test="voiceEnd != null" >
+        #{voiceEnd,jdbcType=BIGINT},
+      </if>
+      <if test="asrEnd != null" >
+        #{asrEnd,jdbcType=BIGINT},
+      </if>
+      <if test="chatEnd != null" >
+        #{chatEnd,jdbcType=BIGINT},
+      </if>
+      <if test="users != null" >
+        #{users,jdbcType=VARCHAR},
+      </if>
+      <if test="crtTime != null" >
+        #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        #{memo,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.Work" >
+    update rokid_work
+    <set >
+      <if test="time != null" >
+        time = #{time,jdbcType=VARCHAR},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=BIGINT},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=BIGINT},
+      </if>
+      <if test="users != null" >
+        users = #{users,jdbcType=VARCHAR},
+      </if>
+      <if test="voice != null" >
+        voice = #{voice,jdbcType=BOOLEAN},
+      </if>
+      <if test="asr != null" >
+        asr = #{asr,jdbcType=BOOLEAN},
+      </if>
+      <if test="chat != null" >
+        chat = #{chat,jdbcType=BOOLEAN},
+      </if>
+      <if test="voiceEnd != null" >
+        voice_end = #{voiceEnd,jdbcType=BIGINT},
+      </if>
+      <if test="asrEnd != null" >
+        asr_end = #{asrEnd,jdbcType=BIGINT},
+      </if>
+      <if test="chatEnd != null" >
+        chat_end = #{chatEnd,jdbcType=BIGINT},
+      </if>
+      <if test="crtTime != null" >
+        crt_time = #{crtTime,jdbcType=BIGINT},
+      </if>
+      <if test="crtUser != null" >
+        crt_user = #{crtUser,jdbcType=VARCHAR},
+      </if>
+      <if test="memo != null" >
+        memo = #{memo,jdbcType=VARCHAR},
+      </if>
+      
+      <if test="voice==true" >
+        voice_end = null,
+      </if>
+      <if test="asr==true" >
+        asr_end = null,
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.Work" >
+    update rokid_work
+    set time = #{time,jdbcType=VARCHAR},
+      users = #{users,jdbcType=VARCHAR},
+      crt_time = #{crtTime,jdbcType=BIGINT},
+      crt_user = #{crtUser,jdbcType=VARCHAR},
+      memo = #{memo,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 一栏处理 -->
+  <select id="listCount" resultType="int" >
+  	select 
+    	count(id)
+    from rokid_work
+  </select>
+  <select resultMap="BaseResultMap" id="list">
+  	select 
+    <include refid="Base_Column_List" />
+    from rokid_work
+   order by start_time desc 
+   <if test="param1 != null and param2 != null">
+	limit #{param1},#{param2}
+   </if>
+  </select>
+  
+  <!-- 设置指派已完成 -->
+  <update id="updateWorkEndById">
+    update rokid_work
+    <if test="param1 == 1">
+    	set voice_end = #{param2}
+    </if>
+    <if test="param1 == 2">
+    	set asr_end = #{param2}
+    </if>
+    <if test="param1 == 3">
+    	set chat_end = #{param2}
+    </if>
+    where id = #{param3} 
+  </update>
+  
+  <select resultType="com.rokid.soa.bo.manage.CountUserYm" id="workCount">
+  	select 
+  		sum(voice) as voiceCnt,
+  		sum(asr) as asrCnt,
+  		sum(chat) as chatCnt
+    from rokid_work w
+    where w.start_time <![CDATA[ <= ]]> #{param2} and w.end_time <![CDATA[ >= ]]> #{param1}
+    <if test="param3 != null">
+    	and w.id != #{param3}
+    </if>
+  </select>
+  
+  <!-- 获取指派任务信息 -->
+  <select id="selectWorks" resultMap="BaseResultMap">
+    select id, start_time, end_time
+      from rokid_work 
+     <where>
+      <if test="_parameter == 1">
+        and voice = 1
+      	and voice_end is null 
+      </if> 
+      <if test="_parameter == 2">
+      	and asr = 1
+      	and asr_end is null 
+      </if> 
+      <if test="_parameter == 3">
+        and chat = 1
+      	and chat_end is null 
+      </if>  
+     </where>    
+     order by start_time
+  </select>
+  
+  
+  
+  
+  
+  
+  
+  <!-- 用户一栏 -->
+  <select resultType="com.rokid.soa.bo.common.IdVal" id="listUser">
+  	select id, user as value
+    from rokid_user
+    where id in <foreach collection="param1" item="item" index="index" open="(" separator="," close=")">#{item}</foreach>
+   <if test="param2 == null">
+   </if>
+  </select>
+  <select resultType="com.rokid.soa.bo.common.IdVal" id="listWorkUser">
+  	select distinct u.id, u.user as value
+    from rokid_work_user w
+    left join rokid_user u on w.user = u.id
+    where w.work_id = #{_parameter}
+  </select>  
+  
+  <update id="deleteByUserId">
+    update rokid_work set
+     users = replace(users, CONCAT(#{_parameter},','), '')
+  </update>
+    
+</mapper>

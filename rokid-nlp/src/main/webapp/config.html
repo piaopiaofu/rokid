@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+</head>
+<body ng-controller="rokid_config">
+<div class="header" style="margin-bottom:15px;margin-top:0px;float:left;width:100%;z-index:10000;">
+	<div class="top" style="background:#393D49;color:white;width:100%;">
+		<!--导航-->
+		<h1 class="logo" style="float:left">ROKID NLP标注  </h1> 
+		<div class="tool" style="float:right;">
+			<div class="item user ng-binding">用户名:<span id=user></span></div>
+			<div class="item"><button class="layui-btn layui-btn-small layui-btn-danger" ng-click="logout();">退出</button></div>
+			<div class="layui-clear"></div>
+		</div>
+	</div>
+</div><br>
+
+<div class="mleft" style="padding-left:10px;">
+	<div class="menu" onclick="location.href='./main.html'">
+		NLP标注
+	</div>
+	<div class="menu" onclick="location.href='./error.html'">
+		标注错误<br>
+		NLP查询
+	</div>
+	<div class="menu" onclick="location.href='./success.html'">
+		处理完成<br>
+		NLP查询
+	</div>
+	<div class="menu" onclick="location.href='./count.html'">
+		统计界面
+	</div>
+	<div ng-show="isadm" class="menu" onclick="location.href='./user.html'">
+		用户管理
+	</div>
+	<div ng-show="isadm" class="menu box-shadow-1" onclick="location.href='./config.html'">
+		配置管理
+	</div>
+</div>
+
+<div class="mright son-page">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th style="width:100px;">key</th>				
+				<th style="width:400px;">配置内容</th>
+				<th style="width:200px;">备注</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in list" ng-show="list">
+				<td><div style="padding-top:5px;">{{row.id}}</div></td>				
+				<td><input type="text" maxlength="100"  maxlength="100" title="{{row.value}}" ng-model="row.value" class="layui-input-small"></td>
+				<td><input type="text" maxlength="25"  maxlength="25" title="{{row.name}}" ng-model="row.name" class="layui-input-small"></td>
+				<td>&nbsp;<button class="layui-btn layui-btn-small layui-btn-normal" ng-click="update(row)">　保 存　</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</body>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/rokid_config.js"></script>
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/common.css">
+</head>
+<body ng-controller="main">
+
+<!--顶部-->
+<div class="header">
+	<!--logo-->
+	<div class="top" style="background:#393D49;color:white">
+		<!--导航-->
+		<h1 class="logo" style="float:left">ROKID 标注  </h1> 
+		<mainmenu mainmenu-data="menu" style="float:left;margin-left:210px;"></mainmenu>
+		<div class="tool" style="float:right;">
+			<div class="item user">用户名:{{userInfo.user}}&nbsp;&nbsp;({{userInfo.typeName}})</div>
+			<div class="item"><button class="layui-btn layui-btn-small layui-btn-danger" ng-click="logout();">退出</button></div>
+		<div class="layui-clear"></div>
+		</div>
+	</div>	
+</div>
+<!--顶部-end-->
+
+<!--主体-->
+<div class="layui-body">
+	<iframe src="voice.html" frameborder="no" border="0" marginwidth="0" marginheight="0" scrolling="yes" height="99%" width="100%" name="page"></iframe>
+</div>
+<!--主体-end-->
+<script type="text/javascript">
+	var isMain = true;
+</script>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/main.js"></script>
+</body>
+</html>

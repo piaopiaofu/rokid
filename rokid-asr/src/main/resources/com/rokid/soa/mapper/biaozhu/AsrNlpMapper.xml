@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.biaozhu.AsrNlpMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.biaozhu.AsrNlp" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="sn" property="sn" jdbcType="VARCHAR" />
+    <result column="path" property="path" jdbcType="VARCHAR" />
+    <result column="fstatus" jdbcType="INTEGER" property="fstatus" />
+    <result column="time" property="time" jdbcType="BIGINT" />
+    <result column="asr" property="asr" jdbcType="VARCHAR" />
+    <result column="asr_edit" property="asrEdit" jdbcType="VARCHAR" />
+    <result column="asr_edit_cnt" property="asrEditCnt" jdbcType="SMALLINT" />
+    <result column="asr_type" property="asrType" jdbcType="SMALLINT" />
+    <result column="domain" property="domain" jdbcType="VARCHAR" />
+    <result column="intent" property="intent" jdbcType="VARCHAR" />
+    <result column="slot" property="slot" jdbcType="VARCHAR" />
+    <result column="nlp" property="nlp" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="SMALLINT" />
+    <result column="ext_field" jdbcType="VARCHAR" property="extField" />
+    <result column="edit_admin" jdbcType="SMALLINT" property="editAdmin" />
+    <result column="upd_time" property="updTime" jdbcType="BIGINT" />
+    <result column="upd_id" property="updId" jdbcType="VARCHAR" />
+    <result column="upd_name" property="updName" jdbcType="VARCHAR" />
+  </resultMap>
+  
+  <update id="biaozhu"><!-- id, upd_id, upd_time, edit_admin, ext_field, asr_type, asr_edit, asr_edit_cnt, type  -->
+    update rokid_asr_nlp
+       <set>
+	       <if test="param2 ==null or param2 != '-1'">
+	       		upd_id = #{param2},
+	       </if>
+	       <if test="param3 ==null or param3 != '-1'">
+	       		upd_time = #{param3},
+	       </if>
+	       <if test="param4 ==null or param4 != '-1'">
+	       		edit_admin = #{param4},
+	       </if>
+	       <if test="param5 ==null or param5 != '-1'">
+	       		ext_field = #{param5},
+	       </if>
+	       <if test="param6 ==null or param6 != '-1'">
+	       		asr_type = #{param6},
+	       </if>
+	       <if test="param7 ==null or param7 != '-1'">
+	       		asr_edit = #{param7},
+	       </if>
+	       <if test="param8 ==null or param8 != '-1'">
+	       		asr_edit_cnt = #{param8},
+	       </if>	       
+	       <if test="param9 ==null or param9 != '-1'">
+	       		type = #{param9},
+	       </if>
+       </set>
+     where id = #{param1}
+  </update>
+  
+  <sql id="Base_Column_List" >
+    id, sn, path, time, asr, asr_type, asr_edit, domain, intent, slot, type, upd_time, upd_id, ext_field, edit_admin
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_asr_nlp
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_asr_nlp
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.biaozhu.AsrNlp" >
+    insert into rokid_asr_nlp (id, sn, path, 
+      time, asr, asr_edit, asr_type, domain, intent, 
+      slot, nlp, type, upd_time, 
+      upd_id)
+    values (#{id,jdbcType=VARCHAR}, #{sn,jdbcType=VARCHAR}, #{path,jdbcType=VARCHAR}, 
+      #{time,jdbcType=BIGINT}, #{asr,jdbcType=VARCHAR}, #{asrEdit,jdbcType=VARCHAR}, #{asrType,jdbcType=SMALLINT}, #{domain,jdbcType=VARCHAR}, #{intent,jdbcType=VARCHAR}, 
+      #{slot,jdbcType=VARCHAR}, #{nlp,jdbcType=VARCHAR}, #{type,jdbcType=SMALLINT}, #{updTime,jdbcType=BIGINT}, 
+      #{updId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.biaozhu.AsrNlp" >
+    insert into rokid_asr_nlp
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sn != null" >
+        sn,
+      </if>
+      <if test="path != null" >
+        path,
+      </if>
+      <if test="time != null" >
+        time,
+      </if>
+      <if test="asr != null" >
+        asr,
+      </if>
+      <if test="asrEdit != null" >
+        asr_edit,
+      </if>
+      <if test="asrEditCnt != null" >
+        asr_edit_cnt,
+      </if>
+      <if test="asrType != null" >
+        asr_type,
+      </if>
+      <if test="domain != null" >
+        domain,
+      </if>
+      <if test="intent != null" >
+        intent,
+      </if>
+      <if test="slot != null" >
+        slot,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="updTime != null" >
+        upd_time,
+      </if>
+      <if test="updId != null" >
+        upd_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="sn != null" >
+        #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="time != null" >
+        #{time,jdbcType=BIGINT},
+      </if>
+      <if test="asr != null" >
+        #{asr,jdbcType=VARCHAR},
+      </if>
+      <if test="asrEdit != null" >
+        #{asrEdit,jdbcType=VARCHAR},
+      </if>
+      <if test="asrEditCnt != null" >
+        #{asrEditCnt,jdbcType=SMALLINT},
+      </if>
+      <if test="asrType != null" >
+        #{asrType,jdbcType=SMALLINT},
+      </if>
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="slot != null" >
+        #{slot,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="updTime != null" >
+        #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null" >
+        #{updId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.biaozhu.AsrNlp" >
+    update rokid_asr_nlp
+    <set >
+      <if test="sn != null" >
+        sn = #{sn,jdbcType=VARCHAR},
+      </if>
+      <if test="path != null" >
+        path = #{path,jdbcType=VARCHAR},
+      </if>
+      <if test="fstatus != null" >
+        fstatus = #{fstatus,jdbcType=INTEGER},
+      </if>
+      <if test="time != null" >
+        time = #{time,jdbcType=BIGINT},
+      </if>
+      <if test="asr != null" >
+        asr = #{asr,jdbcType=VARCHAR},
+      </if>
+      <if test="asrEdit != null" >
+        asr_edit = #{asrEdit,jdbcType=VARCHAR},
+      </if>
+      <if test="asrEditCnt != null" >
+        asr_edit_cnt = #{asrEditCnt,jdbcType=SMALLINT},
+      </if>
+      <if test="asrType != null" >
+        asr_type = #{asrType,jdbcType=SMALLINT},
+      </if>
+      <if test="domain != null" >
+        domain = #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="intent != null" >
+        intent = #{intent,jdbcType=VARCHAR},
+      </if>
+      <if test="slot != null" >
+        slot = #{slot,jdbcType=VARCHAR},
+      </if>
+      <if test="nlp != null" >
+        nlp = #{nlp,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="updTime != null" >
+        upd_time = #{updTime,jdbcType=BIGINT},
+      </if>
+      <if test="updId != null" >
+        upd_id = #{updId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.biaozhu.AsrNlp" >
+    update rokid_asr_nlp
+    set sn = #{sn,jdbcType=VARCHAR},
+      path = #{path,jdbcType=VARCHAR},
+      time = #{time,jdbcType=BIGINT},
+      asr = #{asr,jdbcType=VARCHAR},
+      asr_edit = #{asrEdit,jdbcType=VARCHAR},
+      asr_type = #{asrType,jdbcType=SMALLINT},
+      domain = #{domain,jdbcType=VARCHAR},
+      intent = #{intent,jdbcType=VARCHAR},
+      slot = #{slot,jdbcType=VARCHAR},
+      type = #{type,jdbcType=SMALLINT},
+      upd_time = #{updTime,jdbcType=BIGINT},
+      upd_id = #{updId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  
+  <!-- 一栏查询 -->
+  <select id="listCount" resultType="int" parameterType="string">
+  	select 
+    	count(id)
+    from rokid_asr_nlp
+    <where>
+    	    and time > 1480521599999
+    	    and ifnull(fstatus,200) = 200
+	    <if test='param1 != null'>
+	    	and upd_id = #{param1}
+	    </if>
+	    <if test='param2 != null'>
+	    	and sn like CONCAT('',#{param2},'%')
+	    </if>
+	    <if test='param3 != null'>
+	    	and time <![CDATA[ >= ]]> #{param3} 
+	    </if>
+	    <if test='param4 != null'>
+	    	and time <![CDATA[ <= ]]> #{param4} 
+	    </if>
+	    <if test='param5 != null'>
+	    	and CHAR_LENGTH(asr) <![CDATA[ >= ]]> #{param5} 
+	    </if>
+	    <if test='param6 != null'>
+	    	and asr_type = #{param6} 
+	    </if>
+	    <if test='param7 != null'>
+	    	and type = #{param7}
+	    </if>
+    </where>    
+  </select>
+  <select id="list" resultMap="BaseResultMap">
+  	select l.*, u.user upd_name
+  	  from (
+	  	select 
+	    	r.id, r.sn, r.path, r.time, r.asr, asr_edit, asr_edit_cnt, r.type, r.asr_type, r.upd_id, r.edit_admin, r.fstatus
+	    from rokid_asr_nlp r
+	    <where>
+	    	    and time > 1480521599999
+	    	    and ifnull(fstatus,200) = 200
+	    	<if test='param3 != null'>
+		    	and upd_id = #{param3}
+		    </if>
+		    <!-- 分页数据不传，说明获取标注者数据 -->
+		    <if test='param1 == null'>
+		    	and upd_time is null
+		    </if>
+		    <if test='param4 != null'>
+		    	and sn like CONCAT('',#{param4},'%')
+		    </if>
+		    <if test='param5 != null'>
+		    	and time <![CDATA[ >= ]]> #{param5} 
+		    </if>
+		    <if test='param6 != null'>
+		    	and time <![CDATA[ <= ]]> #{param6} 
+		    </if>
+		    <if test='param7 != null'>
+		    	and CHAR_LENGTH(asr) <![CDATA[ >= ]]> #{param7} 
+		    </if>
+		    <if test='param8 != null'>
+		    	and asr_type = #{param8} 
+		    </if>
+		    <if test='param9 != null'>
+		    	and type = #{param9}
+		    </if>
+	    </where>
+	   order by time desc
+	   <if test="param1 != null and param2 != null">
+		limit #{param1},#{param2}
+	   </if>
+	 ) l left join rokid_user u on l.upd_id = u.id
+  </select>
+  
+  <!-- 关联指派数据获取数据 -->
+  <update id="getWorkRecordByWorkId">
+    update rokid_asr_nlp
+       set upd_id = #{param3}
+     where time <![CDATA[ >= ]]> #{param1} 
+       and time <![CDATA[ <= ]]> #{param2} 
+       and upd_id is null
+       and upd_time is null
+       and ifnull(fstatus,200) = 200
+       order by time
+       limit 50
+  </update>
+  <!-- 正常指派数据获取数据 -->
+  <update id="getWorkRecordByNormal">
+    update rokid_asr_nlp
+       set upd_id = #{_parameter}
+     where time > 1480521599999
+       and upd_id is null
+       and work_id is null
+       and ifnull(fstatus,200) = 200
+       order by id
+       limit 50
+  </update>
+  
+  <!-- 用户退出删除分配数据 -->
+  <update id="loginOutDelWorkDate">
+    update rokid_asr_nlp
+       set upd_id = null
+    <where>
+     	<if test="_parameter != null">
+     		and upd_id = #{_parameter}
+     	</if>
+		and asr_type is null
+		and upd_time is null
+	</where>
+  </update>
+</mapper>

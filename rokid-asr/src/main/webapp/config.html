@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html ng-app="rokid_app">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<title>Rokid</title>
+<link rel="stylesheet" href="css/layui.css">
+<link rel="stylesheet" href="css/table.css">
+<link rel="stylesheet" href="css/common.css">
+</head>
+<body>
+
+<div class="son-page" ng-controller="rokid_config">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+				<th style="width:100px;">key</th>				
+				<th style="width:400px;">配置内容</th>
+				<th style="width:200px;">备注</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr ng-repeat="row in list" ng-show="list">
+				<td><div style="padding-top:5px;">{{row.id}}</div></td>				
+				<td><input type="text" maxlength="100"  maxlength="100" title="{{row.value}}" ng-model="row.value" class="layui-input-small"></td>
+				<td><input type="text" maxlength="25"  maxlength="25" title="{{row.name}}" ng-model="row.name" class="layui-input-small"></td>
+				<td>&nbsp;<button class="layui-btn layui-btn-small layui-btn-normal" ng-click="update(row)">　保 存　</button></td>
+			</tr>
+		</tbody>
+	</table>
+</div>
+
+</body>
+<script type="text/javascript" src="js/global.js"></script>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="rokid/modules/rokid_config.js"></script>
+</html>

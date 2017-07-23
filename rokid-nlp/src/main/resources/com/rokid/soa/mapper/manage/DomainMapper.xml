@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.rokid.soa.mapper.manage.DomainMapper" >
+  <resultMap id="BaseResultMap" type="com.rokid.soa.bo.manage.Domain" >
+    <id column="domain" property="domain" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="group_id" property="groupId" jdbcType="INTEGER" />
+    <result column="ver" property="ver" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    domain, type, group_id, ver
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_domain
+    where domain = #{domain,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from rokid_domain
+    where domain = #{domain,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.rokid.soa.bo.manage.Domain" >
+    insert into rokid_domain (domain, type, group_id, ver
+      )
+    values (#{domain,jdbcType=VARCHAR}, #{type,jdbcType=INTEGER}, #{groupId,jdbcType=INTEGER}, #{ver,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.rokid.soa.bo.manage.Domain" >
+    insert into rokid_domain
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="domain != null" >
+        domain,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="groupId != null" >
+        group_id,
+      </if>
+      <if test="ver != null" >
+        ver,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="domain != null" >
+        #{domain,jdbcType=VARCHAR},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="ver != null" >
+        #{ver,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.rokid.soa.bo.manage.Domain" >
+    update rokid_domain
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="groupId != null" >
+        group_id = #{groupId,jdbcType=INTEGER},
+      </if>
+      <if test="ver != null" >
+        ver = #{ver,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where domain = #{domain,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.rokid.soa.bo.manage.Domain" >
+    update rokid_domain
+    set type = #{type,jdbcType=INTEGER},
+      group_id = #{groupId,jdbcType=INTEGER},
+      ver = #{ver,jdbcType=VARCHAR}
+    where domain = #{domain,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="list" resultMap="BaseResultMap" parameterType="com.rokid.soa.bo.manage.Domain" >
+    select 
+    <include refid="Base_Column_List" />
+    from rokid_domain
+    <where>
+    	<if test="param1 != null">
+    		and type = #{param1}
+    	</if>
+    	<if test="param2 != null">
+    		and group_id = #{param2}
+    	</if>
+    </where>
+    order by type 
+  </select>
+  
+  <update id="deleteSync">
+    delete from rokid_domain
+    where type = 1
+      and IFNULL(ver, '') != #{param1}
+  </update>
+</mapper>
